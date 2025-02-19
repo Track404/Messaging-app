@@ -1,1 +1,9 @@
 @import 'tailwindcss';
+
+@layer utilities {
+  @media (min-width: 768px) and (max-width: 825px) {
+    .max-w-range {
+      max-width: 350px; /* Or any value you need */
+    }
+  }
+}
