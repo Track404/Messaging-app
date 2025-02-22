@@ -41,20 +41,26 @@ function MainPage() {
           <div className="flex justify-around items-center border-t-2 h-30 bg-neutral-50">
             <button className="hover:scale-110 cursor-pointer">
               <div className="flex flex-col items-center ">
-                <MessageSquareText className="w-11 h-11 text-amber-400" />
+                <MessageSquareText
+                  strokeWidth="1.25"
+                  className="w-11 h-11 text-amber-400"
+                />
                 <p className="font-medium text-lg">All</p>
               </div>
             </button>
 
             <button className="hover:scale-110 cursor-pointer">
               <div className="flex flex-col items-center ">
-                <User className="w-11 h-11 text-amber-400" />
+                <User strokeWidth="1.25" className="w-11 h-11 text-amber-400" />
                 <p className="font-medium text-lg">Discussion</p>
               </div>
             </button>
             <button className="hover:scale-110 cursor-pointer">
               <div className="flex flex-col items-center ">
-                <Users className="w-11 h-11 text-amber-400" />
+                <Users
+                  strokeWidth="1.25"
+                  className="w-11 h-11 text-amber-400"
+                />
                 <p className="font-medium text-lg">Groups</p>
               </div>
             </button>
