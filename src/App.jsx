@@ -1,8 +1,8 @@
-import SignUpPage from './pages/SignUpPage';
+import MainPage from './pages/MainPage';
 function App() {
   return (
     <>
-      <SignUpPage />
+      <MainPage />
     </>
   );
 }
