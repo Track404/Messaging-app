@@ -1,8 +1,8 @@
-import NewDiscussion from './pages/NewDiscussion';
+import UserDisscussion from './pages/UserDiscussion';
 function App() {
   return (
     <>
-      <NewDiscussion />
+      <UserDisscussion />
     </>
   );
 }
