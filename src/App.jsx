@@ -1,9 +1,8 @@
-import UserPage from './pages/UserPage';
-
+import NewDiscussion from './pages/NewDiscussion';
 function App() {
   return (
     <>
-      <UserPage />
+      <NewDiscussion />
     </>
   );
 }
