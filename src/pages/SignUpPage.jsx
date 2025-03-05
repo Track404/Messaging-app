@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { postUser } from '../api/user';
 import { useState } from 'react';
@@ -10,15 +11,20 @@ function SignUpPage() {
     password: '',
     confirmPassword: '',
   });
-  const {
-    mutate: addUserMutation,
-    isError,
-    error,
-    isSuccess,
-  } = useMutation({
+  const [validationErrors, setValidationErrors] = useState(null);
+  const navigate = useNavigate();
+
+  const { mutate: addUserMutation } = useMutation({
     mutationFn: postUser,
+    onError: (error) => {
+      if (error?.data?.errors) {
+        setValidationErrors(error.data.errors); // Store errors in state
+      }
+    },
     onSuccess: () => {
       console.log('sucess');
+      setValidationErrors(null);
+      navigate('/login');
     },
   });
 
@@ -34,6 +40,7 @@ function SignUpPage() {
       console.log('User info is incomplete');
       return;
     }
+    setValidationErrors(null);
     addUserMutation({
       data: {
         name: userInfo.name,
@@ -44,7 +51,6 @@ function SignUpPage() {
     });
   };
 
-  if (isSuccess) return <p>Sucess!</p>;
   return (
     <>
       <div className="md:flex md:justify-center">
@@ -63,6 +69,15 @@ function SignUpPage() {
                 Be part of a community
               </p>
             </div>
+            {validationErrors && (
+              <ul>
+                {validationErrors.map((err, index) => (
+                  <li key={index} style={{ color: 'red' }}>
+                    {err.msg}
+                  </li>
+                ))}
+              </ul>
+            )}
             <form className="mt-15" onSubmit={handleSubmit}>
               <div>
                 <label
