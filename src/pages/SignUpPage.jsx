@@ -1,9 +1,7 @@
-import ScreenSize from '../components/ScreenSize';
-
+import { Link } from 'react-router-dom';
 function SignUpPage() {
   return (
     <>
-      <ScreenSize />
       <div className="md:flex md:justify-center">
         <div>
           <h2 className="text-amber-400 text-4xl text-left font-semibold m-4 mb-25">
@@ -80,9 +78,9 @@ function SignUpPage() {
             </form>
             <div className="flex gap-1 text-sm mt-2 font-light text-gray-500">
               <p>Already have an account? </p>
-              <a href="" className="text-amber-400">
+              <Link to="/login" className="text-amber-400">
                 Login
-              </a>
+              </Link>
             </div>
           </div>
         </div>

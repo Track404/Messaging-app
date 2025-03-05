@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function LoginPage() {
   return (
     <>
@@ -58,9 +60,9 @@ function LoginPage() {
             </form>
             <div className="flex gap-1 text-sm mt-2 font-light text-gray-500">
               <p>Already have an account? </p>
-              <a href="" className="text-amber-400">
-                Login
-              </a>
+              <Link to="/register" className="text-amber-400">
+                Register
+              </Link>
             </div>
           </div>
         </div>
