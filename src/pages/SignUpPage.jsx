@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { postUser } from '../api/user';
 import { useState } from 'react';
-
+import { Alert } from '@mui/material';
 function SignUpPage() {
   const [userInfo, setUserInfo] = useState({
     name: '',
@@ -14,7 +14,7 @@ function SignUpPage() {
   const [validationErrors, setValidationErrors] = useState(null);
   const navigate = useNavigate();
 
-  const { mutate: addUserMutation } = useMutation({
+  const { mutate: addUserMutation, isSuccess } = useMutation({
     mutationFn: postUser,
     onError: (error) => {
       if (error?.data?.errors) {
@@ -24,7 +24,9 @@ function SignUpPage() {
     onSuccess: () => {
       console.log('sucess');
       setValidationErrors(null);
-      navigate('/login');
+      setTimeout(() => {
+        navigate('/login');
+      }, 3000);
     },
   });
 
@@ -59,7 +61,7 @@ function SignUpPage() {
             THE HIVE
           </h2>
 
-          <div className="flex flex-col items-center md:w-[50vw]">
+          <div className="flex flex-col items-center md:w-[50vw] ">
             <div className="text-center">
               <h1 className="text-6xl font-semibold max-[400px]:w-75 xl:text-7xl max-w-range ">
                 Join The Hive !
@@ -69,15 +71,7 @@ function SignUpPage() {
                 Be part of a community
               </p>
             </div>
-            {validationErrors && (
-              <ul>
-                {validationErrors.map((err, index) => (
-                  <li key={index} style={{ color: 'red' }}>
-                    {err.msg}
-                  </li>
-                ))}
-              </ul>
-            )}
+
             <form className="mt-15" onSubmit={handleSubmit}>
               <div>
                 <label
@@ -184,6 +178,35 @@ function SignUpPage() {
                 Login
               </Link>
             </div>
+            {isSuccess && (
+              <>
+                <div className="flex justify-center w-full mt-10">
+                  <Alert variant="filled" severity="success" className="w-2/3 ">
+                    Confirm Register User
+                  </Alert>
+                </div>
+              </>
+            )}
+
+            {validationErrors && (
+              <>
+                <div className="flex justify-center w-full mt-10">
+                  <Alert
+                    variant="filled"
+                    severity="error"
+                    className=" flex  items-center"
+                  >
+                    <ul>
+                      {validationErrors.map((err, index) => (
+                        <li key={index} style={{ color: 'white' }}>
+                          - {err.msg}
+                        </li>
+                      ))}
+                    </ul>
+                  </Alert>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className="hidden w-0 md:flex md:w-full md:h-screen md:bg-[url(./assets/hive-background.svg)] md:bg-cover"></div>
