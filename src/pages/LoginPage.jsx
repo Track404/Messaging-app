@@ -1,6 +1,49 @@
 import { Link } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { LoginUser } from '../api/authentification';
+import { useState } from 'react';
+import { Alert } from '@mui/material';
 function LoginPage() {
+  const [userInfo, setUserInfo] = useState({
+    email: '',
+    password: '',
+  });
+  const [validationErrors, setValidationErrors] = useState(null);
+  const navigate = useNavigate();
+
+  const { mutate: addUserMutation, isSuccess } = useMutation({
+    mutationFn: LoginUser,
+    onError: (error) => {
+      if (error?.data?.errors) {
+        setValidationErrors(error.data.errors); // Store errors in state
+      }
+    },
+    onSuccess: () => {
+      console.log('success');
+      setValidationErrors(null);
+      setTimeout(() => {
+        navigate('/Interface');
+      }, 3000);
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!userInfo || !userInfo.email || !userInfo.password) {
+      console.log('User info is incomplete');
+      return;
+    }
+    setValidationErrors(null);
+    addUserMutation({
+      data: {
+        name: userInfo.name,
+        email: userInfo.email,
+        password: userInfo.password,
+        confirmPassword: userInfo.confirmPassword,
+      },
+    });
+  };
   return (
     <>
       <div className="md:flex md:justify-center">
@@ -17,7 +60,7 @@ function LoginPage() {
                 Welcome to the hive
               </p>
             </div>
-            <form className="mt-15">
+            <form className="mt-15" onSubmit={handleSubmit}>
               <div>
                 <label
                   htmlFor="email"
@@ -31,6 +74,10 @@ function LoginPage() {
                     id="email"
                     name="email"
                     className="block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85"
+                    value={userInfo.email}
+                    onChange={(e) => {
+                      setUserInfo({ ...userInfo, email: e.target.value });
+                    }}
                   />
                 </div>
               </div>
@@ -47,6 +94,10 @@ function LoginPage() {
                     id="password"
                     name="password"
                     className="block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85"
+                    value={userInfo.password}
+                    onChange={(e) => {
+                      setUserInfo({ ...userInfo, password: e.target.value });
+                    }}
                   />
                 </div>
               </div>
@@ -64,6 +115,34 @@ function LoginPage() {
                 Register
               </Link>
             </div>
+            {isSuccess && (
+              <>
+                <div className="flex justify-center w-full mt-10">
+                  <Alert variant="filled" severity="success" className="w-2/3 ">
+                    Confirm Login
+                  </Alert>
+                </div>
+              </>
+            )}
+            {validationErrors && (
+              <>
+                <div className="flex justify-center w-full mt-10">
+                  <Alert
+                    variant="filled"
+                    severity="error"
+                    className=" flex  items-center"
+                  >
+                    <ul>
+                      {validationErrors.map((err, index) => (
+                        <li key={index} style={{ color: 'white' }}>
+                          {err.msg}
+                        </li>
+                      ))}
+                    </ul>
+                  </Alert>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className="hidden w-0 md:flex md:w-full md:h-screen md:bg-[url(./assets/hive-background.svg)] md:bg-cover"></div>

@@ -112,6 +112,7 @@ function SignUpPage() {
                     name="email"
                     className="block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85"
                     required
+                    title="Please enter your Email."
                   />
                 </div>
               </div>
@@ -134,6 +135,7 @@ function SignUpPage() {
                       setUserInfo({ ...userInfo, password: e.target.value });
                     }}
                     required
+                    title="Please enter your Password."
                   />
                 </div>
               </div>
@@ -158,6 +160,7 @@ function SignUpPage() {
                       });
                     }}
                     required
+                    title="Please confirm your Password."
                   />
                 </div>
               </div>
@@ -187,7 +190,6 @@ function SignUpPage() {
                 </div>
               </>
             )}
-
             {validationErrors && (
               <>
                 <div className="flex justify-center w-full mt-10">
