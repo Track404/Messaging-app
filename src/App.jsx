@@ -49,11 +49,8 @@ function App() {
     const token = localStorage.getItem('token');
     if (token) {
       const decodedToken = jwtDecode(token);
-
       setUserToken(decodedToken.id);
     }
-
-    // If there's no token, redirect to login page
   }, []);
   return (
     <>

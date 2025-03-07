@@ -7,8 +7,22 @@ import {
 } from 'lucide-react';
 import fakeUsers from '../api/fakeUsers';
 import Discussion from '../components/discussion';
+import { useContext } from 'react';
+import { CurrentUserContext } from '../context/createContext';
+import { getUserChats } from '../api/user';
+import { useQuery } from '@tanstack/react-query';
 
 function MainPage() {
+  const userToken = useContext(CurrentUserContext);
+  console.log(userToken);
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['chats', userToken],
+    queryFn: getUserChats,
+    enabled: !!userToken,
+    onSuccess: () => {
+      console.log('fetch');
+    },
+  });
   return (
     <>
       <div className="md:flex md:justify-center">

@@ -12,3 +12,14 @@ export const postUser = async ({ data }) => {
     }
   }
 };
+
+export const getUserChats = async ({ queryKey }) => {
+  try {
+    const [, userToken] = queryKey;
+    if (!userToken) throw new Error('Missing mapId');
+    const response = await axiosInstance.get(`/user/chats/${userToken}`);
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
