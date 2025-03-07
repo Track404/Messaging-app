@@ -10,18 +10,26 @@ function LoginPage() {
     password: '',
   });
   const [validationErrors, setValidationErrors] = useState(null);
+  const [invalidInput, setInvalidInput] = useState(null);
   const navigate = useNavigate();
 
   const { mutate: addUserMutation, isSuccess } = useMutation({
     mutationFn: LoginUser,
     onError: (error) => {
       if (error?.data?.errors) {
-        setValidationErrors(error.data.errors); // Store errors in state
+        setValidationErrors(error.data.errors);
+        const newErrors = {};
+        error.data.errors.forEach((err) => {
+          newErrors[err.path] = err.msg;
+        });
+        setInvalidInput(newErrors);
+        console.log(invalidInput); // Store errors in state
       }
     },
     onSuccess: () => {
       console.log('success');
       setValidationErrors(null);
+      setInvalidInput(null);
       setTimeout(() => {
         navigate('/Interface');
       }, 3000);
@@ -64,7 +72,7 @@ function LoginPage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-black-800 font-semibold text-md xl:text-lg"
+                  className="block text-black-800 font-semibold text-md xl:text-lg "
                 >
                   Email
                 </label>
@@ -73,7 +81,13 @@ function LoginPage() {
                     type="text"
                     id="email"
                     name="email"
-                    className="block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85"
+                    className={`block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset 
+                      focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85
+                      ${
+                        invalidInput?.email
+                          ? 'ring-red-500 focus:outline-red-500'
+                          : 'ring-gray-400'
+                      }`}
                     value={userInfo.email}
                     onChange={(e) => {
                       setUserInfo({ ...userInfo, email: e.target.value });
@@ -93,8 +107,14 @@ function LoginPage() {
                     type="password"
                     id="password"
                     name="password"
-                    className="block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85"
                     value={userInfo.password}
+                    className={`block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset 
+                      focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85
+                      ${
+                        invalidInput?.password
+                          ? 'ring-red-500 focus:outline-red-500'
+                          : 'ring-gray-400'
+                      }`}
                     onChange={(e) => {
                       setUserInfo({ ...userInfo, password: e.target.value });
                     }}
@@ -136,6 +156,7 @@ function LoginPage() {
                       {validationErrors.map((err, index) => (
                         <li key={index} style={{ color: 'white' }}>
                           {err.msg}
+                          {err.param}
                         </li>
                       ))}
                     </ul>
