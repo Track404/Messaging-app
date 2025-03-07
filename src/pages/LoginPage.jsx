@@ -26,8 +26,9 @@ function LoginPage() {
         console.log(invalidInput); // Store errors in state
       }
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       console.log('success');
+      localStorage.setItem('token', data.token);
       setValidationErrors(null);
       setInvalidInput(null);
       setTimeout(() => {

@@ -4,7 +4,9 @@ import NewDisccusion from './pages/NewDiscussion';
 import SignUpPage from './pages/SignUpPage';
 import UserDisscussion from './pages/UserDiscussion';
 import UserPage from './pages/UserPage';
-
+import { useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import { CurrentUserContext } from './context/createContext';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -42,9 +44,22 @@ const router = createBrowserRouter([
   },
 ]);
 function App() {
+  const [userToken, setUserToken] = useState('');
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = jwtDecode(token);
+
+      setUserToken(decodedToken.id);
+    }
+
+    // If there's no token, redirect to login page
+  }, []);
   return (
     <>
-      <RouterProvider router={router} />
+      <CurrentUserContext value={userToken}>
+        <RouterProvider router={router} />
+      </CurrentUserContext>
     </>
   );
 }
