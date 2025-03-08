@@ -3,7 +3,7 @@ import userImg from '../assets/userImg.webp';
 function Discussion({ name, message }) {
   return (
     <>
-      <div className="flex w-full h-28  items-center overflow-hidden shadow-sm">
+      <div className="flex w-full h-28  items-center overflow-hidden shadow-sm hover:scale-105">
         <img src={userImg} alt="here" className="rounded-full h-15 w-15 m-3" />
         <div className="flex-1 min-w-0">
           <h2 className="font-bold text-lg">{name}</h2>

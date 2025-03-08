@@ -7,22 +7,40 @@ import {
 } from 'lucide-react';
 import fakeUsers from '../api/fakeUsers';
 import Discussion from '../components/discussion';
-import { useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { CurrentUserContext } from '../context/createContext';
 import { getUserChats } from '../api/user';
 import { useQuery } from '@tanstack/react-query';
 
 function MainPage() {
   const userToken = useContext(CurrentUserContext);
-  console.log(userToken);
-  const { isPending, isError, data, error } = useQuery({
+  const [allChats, setAllChats] = useState(null);
+  const [filterData, setFilterData] = useState(null);
+  const [, setActiveFilter] = useState('all');
+  const { data } = useQuery({
     queryKey: ['chats', userToken],
     queryFn: getUserChats,
     enabled: !!userToken,
-    onSuccess: () => {
-      console.log('fetch');
-    },
   });
+
+  useEffect(() => {
+    if (data) {
+      console.log('Setting Filter Data:', data);
+      setAllChats(data.data.user);
+      setFilterData(data.data.user);
+    }
+  }, [data]);
+  const filterChats = (type) => {
+    setActiveFilter(type); // Update active filter
+
+    if (type === 'groups') {
+      setFilterData({ ...allChats, chats1: [], chats2: [] });
+    } else if (type === 'chats') {
+      setFilterData({ ...allChats, groups: [] });
+    } else {
+      setFilterData(allChats); // Show all
+    }
+  };
   return (
     <>
       <div className="md:flex md:justify-center">
@@ -34,15 +52,22 @@ function MainPage() {
           </div>
           <div className="h-full  overflow-auto">
             <div>
-              {fakeUsers.map((user) => {
-                return (
-                  <Discussion
-                    key={user.id}
-                    name={user.name}
-                    message={user.message}
-                  />
-                );
-              })}
+              {['chats1', 'chats2', 'groups'].flatMap((chatType) =>
+                filterData?.[chatType]?.map((chat) => {
+                  const name =
+                    chatType === 'chats1'
+                      ? chat.users2?.name
+                      : chatType === 'chats2'
+                      ? chat.users1?.name
+                      : chat.group.name; // Use `chat.name` for groups
+
+                  const message = chat.messages?.[0]?.content;
+
+                  return (
+                    <Discussion key={chat.id} name={name} message={message} />
+                  );
+                })
+              )}
             </div>
 
             <button className="group/button absolute bottom-32 right-10 cursor-pointer inline-flex items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-3 py-3 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20">
@@ -53,7 +78,12 @@ function MainPage() {
             </button>
           </div>
           <div className="flex justify-around items-center border-t-2 h-30 bg-neutral-50">
-            <button className="hover:scale-110 cursor-pointer">
+            <button
+              onClick={() => {
+                filterChats('all');
+              }}
+              className="hover:scale-110 cursor-pointer"
+            >
               <div className="flex flex-col items-center ">
                 <MessageSquareText
                   strokeWidth="1.25"
@@ -63,13 +93,23 @@ function MainPage() {
               </div>
             </button>
 
-            <button className="hover:scale-110 cursor-pointer">
+            <button
+              onClick={() => {
+                filterChats('chats');
+              }}
+              className="hover:scale-110 cursor-pointer"
+            >
               <div className="flex flex-col items-center ">
                 <User strokeWidth="1.25" className="w-11 h-11 text-amber-400" />
                 <p className="font-medium text-lg">Discussion</p>
               </div>
             </button>
-            <button className="hover:scale-110 cursor-pointer">
+            <button
+              onClick={() => {
+                filterChats('groups');
+              }}
+              className="hover:scale-110 cursor-pointer"
+            >
               <div className="flex flex-col items-center ">
                 <Users
                   strokeWidth="1.25"
