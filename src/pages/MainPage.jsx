@@ -5,25 +5,28 @@ import {
   MessageSquarePlus,
   SendHorizontal,
 } from 'lucide-react';
-import fakeUsers from '../api/fakeUsers';
 import Discussion from '../components/discussion';
 import { useNavigate } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import { CurrentUserContext } from '../context/createContext';
 import { getUserChats } from '../api/user';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { getChatDetails } from '../api/chat';
 import { getGroupDetails } from '../api/group';
+import { postMessageChat } from '../api/chat';
 
 function MainPage() {
   const userToken = useContext(CurrentUserContext);
+  const queryClient = useQueryClient();
   const [allChats, setAllChats] = useState(null);
   const [filterData, setFilterData] = useState(null);
   const [lastChat, setLastChat] = useState(null);
-  const [sortedChats, setSortedChats] = useState([]);
-  const [chatName, setChatName] = useState(null);
+  const [, setSortedChats] = useState([]);
   const [, setActiveFilter] = useState('all');
+  const [newMessage, setNewmessage] = useState('');
   const navigate = useNavigate();
+
   const { data } = useQuery({
     queryKey: ['chats', userToken],
     queryFn: getUserChats,
@@ -44,7 +47,30 @@ function MainPage() {
     },
     enabled: !!lastChat?.id, // Only run the query if lastChat has a valid id
   });
+  const { mutate: addUserMutation } = useMutation({
+    mutationFn: ({ data, chatId, userId }) =>
+      postMessageChat({ data, chatId, userId }),
 
+    onSuccess: () => {
+      console.log('Message sent successfully');
+      queryClient.invalidateQueries(['lastChatDetails']);
+    },
+
+    onError: (error) => {
+      console.error('Error sending message:', error);
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    addUserMutation({
+      data: { content: newMessage }, // Pass the message content
+      chatId: lastChat.id, // Pass the current chat ID
+      userId: userToken, // Pass the user ID (your token)
+    });
+    setNewmessage('');
+  };
   useEffect(() => {
     if (data) {
       console.log('Setting Filter Data:', data);
@@ -121,6 +147,8 @@ function MainPage() {
                       key={chat.id}
                       name={name}
                       message={chat.messages?.[0]?.content}
+                      userId={chat.id}
+                      chatType={chat.chatType}
                     />
                   );
                 })}
@@ -183,25 +211,44 @@ function MainPage() {
         </div>
         <div className="hidden w-0 md:flex md:flex-col md:w-full md:h-screen ">
           <div className="bg-white h-auto w-full shadow-3xl border-b-1">
-            <Discussion name={chatName} />
+            <Discussion name={chatDetails?.data?.chat?.users1.name} />
           </div>
-          <div className="h-full w-full relative md:bg-[url(./assets/messageBackgournd.svg)] md:bg-contain">
-            <p className="bg-amber-100 m-4 p-2 w-50 shadow-2xl rounded-2xl">
-              {fakeUsers[0].message}
-            </p>
-            <p className="bg-amber-300 m-4 p-2 w-50 shadow-2xl rounded-2xl absolute right-4">
-              {fakeUsers[1].message}
-            </p>
-            <form className="absolute bottom-2  w-full flex items-center justify-center ">
+          <div className=" flex flex-col h-full w-full relative md:bg-[url(./assets/messageBackgournd.svg)] md:bg-contain">
+            {chatDetails?.data?.chat?.messages.map((message) => {
+              return message.userId !== userToken ? (
+                <p
+                  className="bg-amber-100 m-4 xl:ml-10 text-center p-2 w-50 shadow-2xl rounded-2xl"
+                  key={message.id}
+                >
+                  {message.content}
+                </p>
+              ) : (
+                <p
+                  className="bg-amber-300 m-4 xl:mr-10 text-center self-end p-2 w-50 shadow-2xl rounded-2xl "
+                  key={message.id}
+                >
+                  {message.content}
+                </p>
+              );
+            })}
+
+            <form
+              onSubmit={handleSubmit}
+              className="absolute bottom-2  w-full flex items-center justify-center "
+            >
               <input
                 type="text"
                 id="message"
                 name="message"
                 className="block w-full h-10 ml-5 mr-5 bg-white rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-150"
+                value={newMessage}
+                onChange={(e) => {
+                  setNewmessage(e.target.value);
+                }}
               />
 
               <button
-                type="sumbmit"
+                type="submit"
                 className="group/button  cursor-pointer inline-flex items-center justify-center overflow-hidden rounded-md mr-5 bg-amber-400 backdrop-blur-lg px-3  text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20"
               >
                 <SendHorizontal className="w-10 h-10 text-white" />

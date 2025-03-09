@@ -35,7 +35,7 @@ const router = createBrowserRouter([
     element: <NewDisccusion />,
   },
   {
-    path: '/userDiscussion/:id',
+    path: '/userDiscussion/:chatType/:id',
     element: <UserDisscussion />,
   },
   {

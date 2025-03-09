@@ -1,13 +1,22 @@
 import userImg from '../assets/userImg.webp';
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 // eslint-disable-next-line react/prop-types
-function Discussion({ name, message, userId }) {
+function Discussion({ name, message, userId, chatType }) {
   const navigate = useNavigate();
+  const [typeConvo, setTypeConvo] = useState(null);
+  useEffect(() => {
+    if (chatType === 'chats1' || chatType === 'chats2') {
+      setTypeConvo('chat');
+    } else {
+      setTypeConvo('group');
+    }
+  }, [chatType]);
   return (
     <>
       <div
         onClick={() => {
-          navigate(`/userDiscussion/${userId}`);
+          navigate(`/userDiscussion/${typeConvo}/${userId}`);
         }}
         className="flex w-full h-28  items-center overflow-hidden shadow-sm hover:scale-105"
       >
