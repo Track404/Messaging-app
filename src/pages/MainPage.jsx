@@ -7,27 +7,69 @@ import {
 } from 'lucide-react';
 import fakeUsers from '../api/fakeUsers';
 import Discussion from '../components/discussion';
+import { useNavigate } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import { CurrentUserContext } from '../context/createContext';
 import { getUserChats } from '../api/user';
 import { useQuery } from '@tanstack/react-query';
+import { getChatDetails } from '../api/chat';
+import { getGroupDetails } from '../api/group';
 
 function MainPage() {
   const userToken = useContext(CurrentUserContext);
   const [allChats, setAllChats] = useState(null);
   const [filterData, setFilterData] = useState(null);
+  const [lastChat, setLastChat] = useState(null);
+  const [sortedChats, setSortedChats] = useState([]);
+  const [chatName, setChatName] = useState(null);
   const [, setActiveFilter] = useState('all');
+  const navigate = useNavigate();
   const { data } = useQuery({
     queryKey: ['chats', userToken],
     queryFn: getUserChats,
     enabled: !!userToken,
   });
 
+  const { data: chatDetails } = useQuery({
+    queryKey: ['lastChatDetails', lastChat?.id],
+    queryFn: async () => {
+      if (lastChat?.chatType === 'chats1' || lastChat?.chatType === 'chats2') {
+        // If it's a chat, call the chat details API
+        return await getChatDetails(lastChat?.id); // Ensure you're passing lastChat.id to the API function
+      } else if (lastChat?.chatType === 'groups') {
+        // If it's a group, call the group details API
+        return await getGroupDetails(lastChat?.id); // Pass lastChat.id to the group details function
+      }
+      return null; // Return null if it's neither a chat nor a group (or an invalid lastChat)
+    },
+    enabled: !!lastChat?.id, // Only run the query if lastChat has a valid id
+  });
+
   useEffect(() => {
     if (data) {
       console.log('Setting Filter Data:', data);
-      setAllChats(data.data.user);
-      setFilterData(data.data.user);
+
+      const userChats = data.data.user;
+
+      // Extract and sort chats once
+      const sortedChats = ['chats1', 'chats2', 'groups']
+        .flatMap(
+          (chatType) =>
+            userChats?.[chatType]?.map((chat) => ({
+              ...chat,
+              chatType,
+              lastMessageTime:
+                chat.messages?.[0]?.sentAt || '1970-01-01T00:00:00Z',
+            })) || []
+        )
+        .sort(
+          (a, b) => new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
+        ); // Sort by latest message
+
+      setAllChats(userChats);
+      setFilterData(userChats);
+      setSortedChats(sortedChats); // Store sorted chats once
+      setLastChat(sortedChats[0] || null); // Store only the last chat
     }
   }, [data]);
   const filterChats = (type) => {
@@ -52,25 +94,44 @@ function MainPage() {
           </div>
           <div className="h-full  overflow-auto">
             <div>
-              {['chats1', 'chats2', 'groups'].flatMap((chatType) =>
-                filterData?.[chatType]?.map((chat) => {
+              {['chats1', 'chats2', 'groups']
+                .flatMap(
+                  (chatType) =>
+                    filterData?.[chatType]?.map((chat) => ({
+                      ...chat,
+                      chatType,
+                      lastMessageTime:
+                        chat.messages?.[0]?.sentAt || '1970-01-01T00:00:00Z',
+                    })) || []
+                )
+                .sort(
+                  (a, b) =>
+                    new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
+                ) // Sort by latest message
+                .map((chat) => {
                   const name =
-                    chatType === 'chats1'
+                    chat.chatType === 'chats1'
                       ? chat.users2?.name
-                      : chatType === 'chats2'
+                      : chat.chatType === 'chats2'
                       ? chat.users1?.name
-                      : chat.group.name; // Use `chat.name` for groups
-
-                  const message = chat.messages?.[0]?.content;
+                      : chat.group?.name;
 
                   return (
-                    <Discussion key={chat.id} name={name} message={message} />
+                    <Discussion
+                      key={chat.id}
+                      name={name}
+                      message={chat.messages?.[0]?.content}
+                    />
                   );
-                })
-              )}
+                })}
             </div>
 
-            <button className="group/button absolute bottom-32 right-10 cursor-pointer inline-flex items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-3 py-3 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20">
+            <button
+              onClick={() => {
+                navigate(`/newDiscussion`);
+              }}
+              className="group/button absolute bottom-32 right-10 cursor-pointer inline-flex items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-3 py-3 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20"
+            >
               <MessageSquarePlus className="w-10 h-10 text-white" />
               <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-13deg)_translateX(-100%)] group-hover/button:duration-1000 group-hover/button:[transform:skew(-13deg)_translateX(100%)]">
                 <div className="relative h-full w-10 bg-white/20"></div>
@@ -122,7 +183,7 @@ function MainPage() {
         </div>
         <div className="hidden w-0 md:flex md:flex-col md:w-full md:h-screen ">
           <div className="bg-white h-auto w-full shadow-3xl border-b-1">
-            <Discussion name={fakeUsers[0].name} />
+            <Discussion name={chatName} />
           </div>
           <div className="h-full w-full relative md:bg-[url(./assets/messageBackgournd.svg)] md:bg-contain">
             <p className="bg-amber-100 m-4 p-2 w-50 shadow-2xl rounded-2xl">

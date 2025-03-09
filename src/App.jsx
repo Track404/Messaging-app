@@ -28,7 +28,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/Interface',
-    element: <UserDisscussion />,
+    element: <MainPage />,
   },
   {
     path: '/newDiscussion',
