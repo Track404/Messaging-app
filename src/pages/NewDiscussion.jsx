@@ -1,10 +1,4 @@
-import {
-  User,
-  Users,
-  MessageSquareText,
-  MessageSquarePlus,
-  SendHorizontal,
-} from 'lucide-react';
+import { User, Users, MessageSquareText, SendHorizontal } from 'lucide-react';
 import fakeUsers from '../api/fakeUsers';
 import Discussion from '../components/discussion';
 
@@ -37,13 +31,6 @@ function NewDiscussion() {
                 return <Discussion key={user.id} name={user.name} />;
               })}
             </div>
-
-            <button className="group/button absolute bottom-32 right-10 cursor-pointer inline-flex items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-3 py-3 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20">
-              <MessageSquarePlus className="w-10 h-10 text-white" />
-              <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-13deg)_translateX(-100%)] group-hover/button:duration-1000 group-hover/button:[transform:skew(-13deg)_translateX(100%)]">
-                <div className="relative h-full w-10 bg-white/20"></div>
-              </div>
-            </button>
           </div>
           <div className="flex justify-around items-center border-t-2 h-30 bg-neutral-50">
             <button className="hover:scale-110 cursor-pointer">
@@ -78,12 +65,6 @@ function NewDiscussion() {
             <h2>To: Alice Johnson</h2>
           </div>
           <div className="h-full w-full relative md:bg-[url(./assets/messageBackgournd.svg)] md:bg-contain">
-            <p className="bg-amber-100 m-4 p-2 w-50 shadow-2xl rounded-2xl">
-              {fakeUsers[0].message}
-            </p>
-            <p className="bg-amber-300 m-4 p-2 w-50 shadow-2xl rounded-2xl absolute right-4">
-              {fakeUsers[1].message}
-            </p>
             <form className="absolute bottom-2  w-full flex items-center justify-center ">
               <input
                 type="text"

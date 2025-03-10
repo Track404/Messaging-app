@@ -25,3 +25,16 @@ export const postMessageChat = async ({ data, chatId, userId }) => {
     }
   }
 };
+
+export const createChat = async ({ data }) => {
+  try {
+    const response = await axiosInstance.post(`/chat/`, data);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw error.response;
+    } else {
+      throw new Error('Something went wrong');
+    }
+  }
+};

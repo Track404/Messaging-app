@@ -23,3 +23,12 @@ export const getUserChats = async ({ queryKey }) => {
     throw new Error(error);
   }
 };
+
+export const getAllUsers = async () => {
+  try {
+    const response = await axiosInstance.get(`/user`);
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
