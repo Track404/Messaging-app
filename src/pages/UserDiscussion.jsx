@@ -36,7 +36,7 @@ function UserDiscussion() {
   });
 
   const { data: chatDetails } = useQuery({
-    queryKey: ['lastChatDetails', params],
+    queryKey: ['ChatDetails', params],
     queryFn: async () => {
       if (params?.chatType === 'chat') {
         // If it's a chat, call the chat details API
@@ -63,7 +63,7 @@ function UserDiscussion() {
 
     onSuccess: () => {
       console.log('Message sent successfully');
-      queryClient.invalidateQueries(['lastChatDetails']);
+      queryClient.invalidateQueries(['ChatDetails']);
     },
 
     onError: (error) => {

@@ -11,14 +11,14 @@ import UserCard from '../components/UserCard';
 import { useNavigate } from 'react-router-dom';
 import { useState, useContext } from 'react';
 import { CurrentUserContext } from '../context/createContext';
-
+import { useQueryClient } from '@tanstack/react-query';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { getAllUsers } from '../api/user';
-import { createChat } from '../api/chat';
+import { createChat, postMessageChat } from '../api/chat';
 
 function NewDisccusionUpgrade() {
   const userToken = useContext(CurrentUserContext);
-
+  const queryClient = useQueryClient();
   const [newMessage, setNewmessage] = useState('');
   const [userSendId, setUserSendId] = useState({ id: '', name: '' });
   const navigate = useNavigate();
@@ -31,11 +31,34 @@ function NewDisccusionUpgrade() {
 
   const { mutate: addUserMutation } = useMutation({
     mutationFn: createChat,
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       console.log('Chat created successfully');
-      navigate(`/userDiscussion/chat/${data?.chat?.id}`);
-    },
 
+      const chatId = data?.chat?.id;
+      if (chatId && variables.messageToSend) {
+        // Send first message after chat is created
+        addChatMutation({
+          data: { content: variables.messageToSend },
+          chatId: chatId,
+          userId: userToken,
+        });
+        queryClient.invalidateQueries(['ChatDetails']);
+
+        // Navigate to the chat
+      }
+      navigate(`/userDiscussion/chat/${chatId}`);
+    },
+    onError: (error) => {
+      console.error('Error creating chat:', error);
+    },
+  });
+
+  const { mutate: addChatMutation } = useMutation({
+    mutationFn: ({ data, chatId, userId }) =>
+      postMessageChat({ data, chatId, userId }),
+    onSuccess: () => {
+      console.log('Message sent successfully');
+    },
     onError: (error) => {
       console.error('Error sending message:', error);
     },
@@ -43,12 +66,21 @@ function NewDisccusionUpgrade() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (userSendId.id) {
-      addUserMutation({
-        data: { firstUserId: userToken, secondUserId: userSendId.id },
-      });
-      setUserSendId({ id: '', name: '' });
+
+    if (!userSendId.id) {
+      console.warn('No user selected for chat.');
+      return;
     }
+
+    const messageToSend = newMessage; // Store the message in a variable before clearing state
+
+    addUserMutation({
+      data: { firstUserId: userToken, secondUserId: userSendId.id },
+      messageToSend, // Pass the message along with the mutation
+    });
+
+    setUserSendId({ id: '', name: '' });
+    setNewmessage(''); // Clear input field
   };
 
   return (
@@ -125,7 +157,10 @@ function NewDisccusionUpgrade() {
             <div className="flex flex-col-reverse overflow-y-auto w-full flex-grow"></div>
 
             <div className="w-full bg-white ">
-              <form className="flex items-center justify-center w-full p-3 ">
+              <form
+                onSubmit={handleSubmit}
+                className="flex items-center justify-center w-full p-3 "
+              >
                 <input
                   type="text"
                   id="message"
