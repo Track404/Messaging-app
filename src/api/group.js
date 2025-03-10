@@ -9,3 +9,19 @@ export const getGroupDetails = async (id) => {
     throw new Error(error);
   }
 };
+
+export const postMessageGroup = async ({ data, chatId, userId }) => {
+  try {
+    const response = await axiosInstance.post(
+      `/messageGroup/${chatId}/${userId}`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw error.response;
+    } else {
+      throw new Error('Something went wrong');
+    }
+  }
+};

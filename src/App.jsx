@@ -2,8 +2,9 @@ import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import NewDisccusion from './pages/NewDiscussion';
 import SignUpPage from './pages/SignUpPage';
-import UserDisscussion from './pages/UserDiscussion';
+
 import UserPage from './pages/UserPage';
+import UserDiscussion from './pages/UserDiscussion';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { CurrentUserContext } from './context/createContext';
@@ -36,7 +37,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/userDiscussion/:chatType/:id',
-    element: <UserDisscussion />,
+    element: <UserDiscussion />,
   },
   {
     path: '/userPage/:id',
