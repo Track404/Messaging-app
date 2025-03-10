@@ -9,16 +9,16 @@ import Discussion from '../components/discussion';
 import UserCard from '../components/UserCard';
 
 import { useNavigate } from 'react-router-dom';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { CurrentUserContext } from '../context/createContext';
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { getAllUsers } from '../api/user';
 import { createChat } from '../api/chat';
 
 function NewDisccusionUpgrade() {
   const userToken = useContext(CurrentUserContext);
-  const queryClient = useQueryClient();
+
   const [newMessage, setNewmessage] = useState('');
   const [userSendId, setUserSendId] = useState({ id: '', name: '' });
   const navigate = useNavigate();
@@ -28,6 +28,28 @@ function NewDisccusionUpgrade() {
     queryFn: getAllUsers,
     enabled: !!userToken,
   });
+
+  const { mutate: addUserMutation } = useMutation({
+    mutationFn: createChat,
+    onSuccess: (data) => {
+      console.log('Chat created successfully');
+      navigate(`/userDiscussion/chat/${data?.chat?.id}`);
+    },
+
+    onError: (error) => {
+      console.error('Error sending message:', error);
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (userSendId.id) {
+      addUserMutation({
+        data: { firstUserId: userToken, secondUserId: userSendId.id },
+      });
+      setUserSendId({ id: '', name: '' });
+    }
+  };
 
   return (
     <>
@@ -66,15 +88,17 @@ function NewDisccusionUpgrade() {
             </div>
           </div>
           <div className="flex justify-around items-center border-t-2 h-30 bg-neutral-50 md:hidden">
-            <button className="hover:scale-110 cursor-pointer">
-              <div className="flex flex-col items-center ">
-                <MessageSquarePlus
-                  strokeWidth="1.25"
-                  className="w-11 h-11 text-amber-400"
-                />
-                <p className="font-medium text-lg">Create Chat</p>
-              </div>
-            </button>
+            <form onSubmit={handleSubmit}>
+              <button type="submit" className="hover:scale-110 cursor-pointer">
+                <div className="flex flex-col items-center ">
+                  <MessageSquarePlus
+                    strokeWidth="1.25"
+                    className="w-11 h-11 text-amber-400"
+                  />
+                  <p className="font-medium text-lg">Create Chat</p>
+                </div>
+              </button>
+            </form>
 
             <button
               onClick={() => {

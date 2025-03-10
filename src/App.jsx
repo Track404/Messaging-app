@@ -1,6 +1,6 @@
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
-import NewDisccusion from './pages/NewDiscussion';
+
 import SignUpPage from './pages/SignUpPage';
 import NewDisccusionUpgrade from './pages/NewDiscussionUpgrade';
 import UserPage from './pages/UserPage';

@@ -141,13 +141,17 @@ function MainPage() {
                       : chat.chatType === 'chats2'
                       ? chat.users1?.name
                       : chat.group?.name;
+                  const userId =
+                    chat.chatType === 'chats1' || chat.chatType === 'chats2'
+                      ? chat.id
+                      : chat.groupId;
 
                   return (
                     <Discussion
                       key={chat.id}
                       name={name}
                       message={chat.messages?.[0]?.content}
-                      userId={chat.id}
+                      userId={userId}
                       chatType={chat.chatType}
                     />
                   );

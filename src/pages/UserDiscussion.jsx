@@ -228,7 +228,7 @@ function UserDiscussion() {
             <div className="bg-white w-full shadow-3xl border-b-1">
               <Discussion
                 name={
-                  chatDetails?.data?.chat?.users1.name ||
+                  chatDetails?.data?.chat?.users2.name ||
                   chatDetails?.data?.group?.name
                 }
               />
