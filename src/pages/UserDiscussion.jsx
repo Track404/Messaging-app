@@ -91,12 +91,22 @@ function UserDiscussion() {
       const sortedChats = ['chats1', 'chats2', 'groups']
         .flatMap(
           (chatType) =>
-            userChats?.[chatType]?.map((chat) => ({
-              ...chat,
-              chatType,
-              lastMessageTime:
-                chat.messages?.[0]?.sentAt || '1970-01-01T00:00:00Z',
-            })) || []
+            userChats?.[chatType]?.map((chat) =>
+              chatType === 'groups'
+                ? {
+                    ...chat,
+                    chatType,
+                    lastMessageTime:
+                      chat.group.messages?.[0]?.sentAt ||
+                      '1970-01-01T00:00:00Z',
+                  }
+                : {
+                    ...chat,
+                    chatType,
+                    lastMessageTime:
+                      chat.messages?.[0]?.sentAt || '1970-01-01T00:00:00Z',
+                  }
+            ) || []
         )
         .sort(
           (a, b) => new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
@@ -133,12 +143,23 @@ function UserDiscussion() {
               {['chats1', 'chats2', 'groups']
                 .flatMap(
                   (chatType) =>
-                    filterData?.[chatType]?.map((chat) => ({
-                      ...chat,
-                      chatType,
-                      lastMessageTime:
-                        chat.messages?.[0]?.sentAt || '1970-01-01T00:00:00Z',
-                    })) || []
+                    filterData?.[chatType]?.map((chat) =>
+                      chatType === 'groups'
+                        ? {
+                            ...chat,
+                            chatType,
+                            lastMessageTime:
+                              chat.group.messages?.[0]?.sentAt ||
+                              '1970-01-01T00:00:00Z',
+                          }
+                        : {
+                            ...chat,
+                            chatType,
+                            lastMessageTime:
+                              chat.messages?.[0]?.sentAt ||
+                              '1970-01-01T00:00:00Z',
+                          }
+                    ) || []
                 )
                 .sort(
                   (a, b) =>
@@ -158,7 +179,7 @@ function UserDiscussion() {
 
                   return (
                     <Discussion
-                      key={chat.id}
+                      key={crypto.randomUUID()}
                       name={name}
                       message={chat.messages?.[0]?.content}
                       userId={userId}
