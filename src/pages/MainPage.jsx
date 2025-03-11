@@ -41,7 +41,7 @@ function MainPage() {
         return await getChatDetails(lastChat?.id); // Ensure you're passing lastChat.id to the API function
       } else if (lastChat?.chatType === 'groups') {
         // If it's a group, call the group details API
-        return await getGroupDetails(lastChat?.id); // Pass lastChat.id to the group details function
+        return await getGroupDetails(lastChat?.groupId); // Pass lastChat.id to the group details function
       }
       return null; // Return null if it's neither a chat nor a group (or an invalid lastChat)
     },
@@ -237,11 +237,33 @@ function MainPage() {
         <div className="hidden w-0 md:flex md:flex-col md:w-full md:h-screen">
           <div className="flex flex-col w-full h-screen md:bg-[url(./assets/messageBackgournd.svg)] md:bg-contain">
             <div className="bg-white w-full shadow-3xl border-b-1">
-              <Discussion name={chatDetails?.data?.chat?.users1.name} />
+              {chatDetails?.data?.chat?.name && (
+                <Discussion name={chatDetails?.data?.chat?.users1.name} />
+              )}
+              {chatDetails?.data?.group?.name && (
+                <Discussion name={chatDetails?.data?.group?.name} />
+              )}
             </div>
 
             <div className="flex flex-col-reverse overflow-y-auto w-full flex-grow">
               {chatDetails?.data?.chat?.messages.map((message) => {
+                return message.userId !== userToken ? (
+                  <p
+                    className="bg-amber-100 m-4 xl:ml-10 text-center p-2 w-50 shadow-2xl rounded-2xl"
+                    key={message.id}
+                  >
+                    {message.content}
+                  </p>
+                ) : (
+                  <p
+                    className="bg-amber-300 m-4 xl:mr-10 text-center self-end p-2 w-50 shadow-2xl rounded-2xl"
+                    key={message.id}
+                  >
+                    {message.content}
+                  </p>
+                );
+              })}
+              {chatDetails?.data?.group?.messages.map((message) => {
                 return message.userId !== userToken ? (
                   <p
                     className="bg-amber-100 m-4 xl:ml-10 text-center p-2 w-50 shadow-2xl rounded-2xl"
