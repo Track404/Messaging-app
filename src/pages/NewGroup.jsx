@@ -5,7 +5,7 @@ import {
   Undo2,
   Send,
 } from 'lucide-react';
-import Discussion from '../components/discussion';
+import userImg from '../assets/userImg.webp';
 import UserCard from '../components/UserCard';
 
 import { useNavigate } from 'react-router-dom';
@@ -14,13 +14,18 @@ import { CurrentUserContext } from '../context/createContext';
 import { useQueryClient } from '@tanstack/react-query';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { getAllUsers } from '../api/user';
-import { createChat, postMessageChat } from '../api/chat';
 
+import {
+  createManyGroupUsers,
+  createGroup,
+  postMessageGroup,
+} from '../api/group';
 function NewGroup() {
   const userToken = useContext(CurrentUserContext);
   const queryClient = useQueryClient();
   const [newMessage, setNewmessage] = useState('');
-  const [userSendId, setUserSendId] = useState({ id: '', name: '' });
+  const [groupName, setGroupName] = useState('');
+  const [userSendId, setUserSendId] = useState([{ id: userToken, name: '' }]);
   const navigate = useNavigate();
 
   const { data: allUsers } = useQuery({
@@ -30,32 +35,47 @@ function NewGroup() {
   });
 
   const { mutate: addUserMutation } = useMutation({
-    mutationFn: createChat,
-    onSuccess: (data, variables) => {
-      console.log('Chat created successfully');
+    mutationFn: createGroup,
+    onSuccess: (data, { messageToSend, usersIds }) => {
+      console.log('Group created successfully');
 
-      const chatId = data?.chat?.id;
-      if (chatId && variables.messageToSend) {
-        // Send first message after chat is created
-        addChatMutation({
-          data: { content: variables.messageToSend },
-          chatId: chatId,
-          userId: userToken,
+      const chatId = data?.group?.id;
+      if (chatId) {
+        // Add users to the group
+        addGroupUsersMutation({
+          data: { usersIds, groupId: chatId },
         });
-        queryClient.invalidateQueries(['ChatDetails']);
 
-        // Navigate to the chat
+        if (messageToSend) {
+          // Send the first message after the chat is created
+          addChatMutation({
+            data: { content: messageToSend },
+            chatId: chatId,
+            userId: userToken,
+          });
+        }
+        navigate(`/userDiscussion/group/${chatId}`);
       }
-      navigate(`/userDiscussion/chat/${chatId}`);
+      queryClient.invalidateQueries(['ChatDetails']);
     },
     onError: (error) => {
       console.error('Error creating chat:', error);
     },
   });
 
+  const { mutate: addGroupUsersMutation } = useMutation({
+    mutationFn: createManyGroupUsers,
+    onSuccess: () => {
+      console.log('Group users created successfully');
+    },
+    onError: (error) => {
+      console.error('Error adding users to group:', error);
+    },
+  });
+
   const { mutate: addChatMutation } = useMutation({
     mutationFn: ({ data, chatId, userId }) =>
-      postMessageChat({ data, chatId, userId }),
+      postMessageGroup({ data, chatId, userId }),
     onSuccess: () => {
       console.log('Message sent successfully');
     },
@@ -67,20 +87,26 @@ function NewGroup() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!userSendId.id) {
-      console.warn('No user selected for chat.');
+    if (!userSendId.length) {
+      console.warn('No users selected for the group.');
+      return;
+    }
+    if (!groupName) {
+      console.warn('No groupName for the group.');
       return;
     }
 
-    const messageToSend = newMessage; // Store the message in a variable before clearing state
+    const messageToSend = newMessage.trim();
 
     addUserMutation({
-      data: { firstUserId: userToken, secondUserId: userSendId.id },
-      messageToSend, // Pass the message along with the mutation
+      data: { name: groupName },
+      messageToSend,
+      usersIds: userSendId.map((user) => user.id),
     });
 
-    setUserSendId({ id: '', name: '' });
-    setNewmessage(''); // Clear input field
+    setUserSendId([{ id: userToken, name: '' }]);
+    setGroupName('');
+    setNewmessage('');
   };
 
   return (
@@ -92,10 +118,29 @@ function NewGroup() {
               NEW GROUP
             </h2>
           </div>
-          <div className="border-b-2 text-2xl font-bold p-4">
+          <button
+            onClick={() => {
+              navigate('/newDiscussion');
+            }}
+            className="border-b-2 text-2xl font-bold p-4"
+          >
             <div className="flex items-center gap-2 ">
               <Users className="w-11 h-11 text-amber-400" />
               <h2>New Disscussion</h2>
+            </div>
+          </button>
+          <div className="border-b-2 text-2xl font-bold p-4">
+            <div className="flex flex-col items-center gap-2 ">
+              <label htmlFor="groupName">GroupName</label>
+              <input
+                type="text"
+                id="groupName"
+                name="groupName"
+                placeholder="Enter a group name"
+                className="block w-full h-10 ml-5 mr-5 bg-white rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-150"
+                value={groupName}
+                onChange={(e) => setGroupName(e.target.value)}
+              />
             </div>
           </div>
           <div className="h-full  overflow-auto">
@@ -106,7 +151,10 @@ function NewGroup() {
                     key={user.id}
                     name={user.name}
                     onClick={() => {
-                      setUserSendId({ id: user.id, name: user.name });
+                      setUserSendId([
+                        ...userSendId,
+                        { id: user.id, name: user.name },
+                      ]);
                     }}
                   />
                 );
@@ -116,7 +164,19 @@ function NewGroup() {
           <div className="border-t-2 text-2xl font-bold p-4 md:hidden">
             <div className="flex items-center gap-2 ">
               <Send className="w-11 h-11 text-amber-400" />
-              To: {userSendId?.name || 'Select a user'}
+              <h2 className=" flex font-bold text-lg ">
+                To:
+                {userSendId.map((user) => {
+                  return (
+                    <>
+                      <p key={user.id} className="pr-1">
+                        {user.name},
+                      </p>
+                    </>
+                  );
+                })}
+                Select a user
+              </h2>
             </div>
           </div>
           <div className="flex justify-around items-center border-t-2 h-30 bg-neutral-50 ">
@@ -127,7 +187,7 @@ function NewGroup() {
                     strokeWidth="1.25"
                     className="w-11 h-11 text-amber-400"
                   />
-                  <p className="font-medium text-lg">Create Chat</p>
+                  <p className="font-medium text-lg">Create Group</p>
                 </div>
               </button>
             </form>
@@ -151,7 +211,29 @@ function NewGroup() {
         <div className="hidden w-0 md:flex md:flex-col md:w-full md:h-screen">
           <div className="flex flex-col w-full h-screen md:bg-[url(./assets/messageBackgournd.svg)] md:bg-contain">
             <div className="bg-white w-full shadow-3xl border-b-1">
-              <Discussion name={`To: ${userSendId?.name || 'Select a user'}`} />
+              <div className="flex w-full h-28  items-center overflow-hidden shadow-sm ">
+                <img
+                  src={userImg}
+                  alt="here"
+                  className="rounded-full h-15 w-15 m-3"
+                />
+
+                <div className="flex-1 min-w-0">
+                  <h2 className=" flex font-bold text-lg ">
+                    To:
+                    {userSendId.map((user) => {
+                      return (
+                        <>
+                          <p key={user.id} className="pr-1">
+                            {user.name},
+                          </p>
+                        </>
+                      );
+                    })}
+                    Select a user
+                  </h2>
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col-reverse overflow-y-auto w-full flex-grow"></div>

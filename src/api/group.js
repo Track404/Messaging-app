@@ -25,3 +25,27 @@ export const postMessageGroup = async ({ data, chatId, userId }) => {
     }
   }
 };
+export const createGroup = async ({ data }) => {
+  try {
+    const response = await axiosInstance.post(`/group`, data);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw error.response;
+    } else {
+      throw new Error('Something went wrong');
+    }
+  }
+};
+export const createManyGroupUsers = async ({ data }) => {
+  try {
+    const response = await axiosInstance.post(`/groupUsers`, data);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw error.response;
+    } else {
+      throw new Error('Something went wrong');
+    }
+  }
+};

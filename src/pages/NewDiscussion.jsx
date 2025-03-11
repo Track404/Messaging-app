@@ -132,7 +132,7 @@ function NewDisccusion() {
                     strokeWidth="1.25"
                     className="w-11 h-11 text-amber-400"
                   />
-                  <p className="font-medium text-lg">Create Chat</p>
+                  <p className="font-medium text-lg">Create Group</p>
                 </div>
               </button>
             </form>
