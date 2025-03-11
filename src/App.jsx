@@ -2,9 +2,10 @@ import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 
 import SignUpPage from './pages/SignUpPage';
-import NewDisccusionUpgrade from './pages/NewDiscussionUpgrade';
+import NewDisccusion from './pages/NewDiscussion';
 import UserPage from './pages/UserPage';
 import UserDiscussion from './pages/UserDiscussion';
+import NewGroup from './pages/NewGroup';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { CurrentUserContext } from './context/createContext';
@@ -33,7 +34,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/newDiscussion',
-    element: <NewDisccusionUpgrade />,
+    element: <NewDisccusion />,
+  },
+  {
+    path: '/newGroup',
+    element: <NewGroup />,
   },
   {
     path: '/userDiscussion/:chatType/:id',

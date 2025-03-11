@@ -16,7 +16,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { getAllUsers } from '../api/user';
 import { createChat, postMessageChat } from '../api/chat';
 
-function NewDisccusionUpgrade() {
+function NewGroup() {
   const userToken = useContext(CurrentUserContext);
   const queryClient = useQueryClient();
   const [newMessage, setNewmessage] = useState('');
@@ -89,13 +89,13 @@ function NewDisccusionUpgrade() {
         <div className="h-screen flex flex-col shadow-2xl md:w-[60vw] relative">
           <div className="shadow-md ">
             <h2 className="text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
-              NEW DISCUSSION
+              NEW GROUP
             </h2>
           </div>
           <div className="border-b-2 text-2xl font-bold p-4">
             <div className="flex items-center gap-2 ">
               <Users className="w-11 h-11 text-amber-400" />
-              <h2>New Group</h2>
+              <h2>New Disscussion</h2>
             </div>
           </div>
           <div className="h-full  overflow-auto">
@@ -113,13 +113,13 @@ function NewDisccusionUpgrade() {
               })}
             </div>
           </div>
-          <div className="border-t-2 text-2xl font-bold p-4">
+          <div className="border-t-2 text-2xl font-bold p-4 md:hidden">
             <div className="flex items-center gap-2 ">
               <Send className="w-11 h-11 text-amber-400" />
               To: {userSendId?.name || 'Select a user'}
             </div>
           </div>
-          <div className="flex justify-around items-center border-t-2 h-30 bg-neutral-50 md:hidden">
+          <div className="flex justify-around items-center border-t-2 h-30 bg-neutral-50 ">
             <form onSubmit={handleSubmit}>
               <button type="submit" className="hover:scale-110 cursor-pointer">
                 <div className="flex flex-col items-center ">
@@ -151,7 +151,7 @@ function NewDisccusionUpgrade() {
         <div className="hidden w-0 md:flex md:flex-col md:w-full md:h-screen">
           <div className="flex flex-col w-full h-screen md:bg-[url(./assets/messageBackgournd.svg)] md:bg-contain">
             <div className="bg-white w-full shadow-3xl border-b-1">
-              <Discussion name={`To: ${userSendId?.name}`} />
+              <Discussion name={`To: ${userSendId?.name || 'Select a user'}`} />
             </div>
 
             <div className="flex flex-col-reverse overflow-y-auto w-full flex-grow"></div>
@@ -187,4 +187,4 @@ function NewDisccusionUpgrade() {
   );
 }
 
-export default NewDisccusionUpgrade;
+export default NewGroup;
