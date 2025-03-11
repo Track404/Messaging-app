@@ -1,15 +1,16 @@
 import userImg from '../assets/userImg.webp';
-import { Settings, MessageSquarePlus, Home, Pencil } from 'lucide-react';
+import { MessageSquarePlus, Home, Pencil } from 'lucide-react';
 
 import { useNavigate } from 'react-router-dom';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { CurrentUserContext } from '../context/createContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getUniqueUser } from '../api/user';
+import { getUniqueUser, updateUser } from '../api/user';
 function UserPage() {
   const userToken = useContext(CurrentUserContext);
   const queryClient = useQueryClient();
   const [isActive, setIsActive] = useState(false);
+  const [userInfo, setUserInfo] = useState({ name: '', email: '' });
   const navigate = useNavigate();
 
   const { data } = useQuery({
@@ -17,7 +18,34 @@ function UserPage() {
     queryFn: getUniqueUser,
     enabled: !!userToken,
   });
+  useEffect(() => {
+    if (data) {
+      setUserInfo(data.data.user);
+    }
+  }, [data]);
 
+  const { mutate: addUserMutation } = useMutation({
+    mutationFn: ({ data, userId }) => updateUser({ data, userId }),
+
+    onSuccess: () => {
+      console.log('UpdateUser sent successfully');
+      queryClient.invalidateQueries(['userInfo']);
+    },
+
+    onError: (error) => {
+      console.error('Error sending message:', error);
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!userInfo) return;
+    addUserMutation({
+      data: { name: userInfo.name, email: userInfo.email }, // Pass the message content
+      userId: userToken, // Pass the user ID (your token)
+    });
+    setIsActive(!isActive);
+  };
   return (
     <>
       <div className="h-screen flex flex-col shadow-2xl ">
@@ -38,7 +66,10 @@ function UserPage() {
                 <Pencil className="absolute bottom-18 left-18 size-15 lg:bottom-26 lg:left-26 lg:size-20 stroke-2 " />
               </div>
 
-              <form className="grid grid-cols-1 lg:grid-cols-2 h-full  gap-5 content-center">
+              <form
+                onSubmit={handleSubmit}
+                className="grid grid-cols-1 lg:grid-cols-2 h-full  gap-5 content-center"
+              >
                 <div>
                   <label
                     htmlFor="username"
@@ -52,6 +83,10 @@ function UserPage() {
                       id="username"
                       name="username"
                       className="block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85"
+                      value={userInfo.name}
+                      onChange={(e) => {
+                        setUserInfo({ ...userInfo, name: e.target.value });
+                      }}
                     />
                   </div>
                 </div>
@@ -68,19 +103,19 @@ function UserPage() {
                       id="email"
                       name="email"
                       className="block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85"
+                      value={userInfo.email}
+                      onChange={(e) => {
+                        setUserInfo({ ...userInfo, email: e.target.value });
+                      }}
                     />
                   </div>
                 </div>
 
-                <button className="group/button lg:col-span-full w-full relative inline-flex items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-10 py-2 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20">
-                  <span
-                    onClick={() => {
-                      setIsActive(!isActive);
-                    }}
-                    className="text-lg"
-                  >
-                    Confirm Change
-                  </span>
+                <button
+                  type="submit"
+                  className="group/button lg:col-span-full w-full relative inline-flex items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-10 py-2 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20"
+                >
+                  <span className="text-lg">Confirm Change</span>
                   <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-13deg)_translateX(-100%)] group-hover/button:duration-1000 group-hover/button:[transform:skew(-13deg)_translateX(100%)]">
                     <div className="relative h-full w-10 bg-white/20"></div>
                   </div>
@@ -107,13 +142,13 @@ function UserPage() {
                   Username
                 </h2>
                 <p className="text-lg font-medium lg:text-xl">
-                  {data?.data?.user.name}
+                  {userInfo && userInfo.name}
                 </p>
               </div>
               <div>
                 <h2 className="font-bold text-3xl mb-4 lg:text-4xl">Email</h2>
                 <p className="text-lg font-medium lg:text-xl">
-                  {data?.data?.user.email}
+                  {userInfo && userInfo.email}
                 </p>
               </div>
 

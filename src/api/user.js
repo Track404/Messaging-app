@@ -13,6 +13,19 @@ export const postUser = async ({ data }) => {
   }
 };
 
+export const updateUser = async ({ data, userId }) => {
+  try {
+    const response = await axiosInstance.put(`/user/${userId}`, data);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw error.response;
+    } else {
+      throw new Error('Something went wrong');
+    }
+  }
+};
+
 export const getUniqueUser = async ({ queryKey }) => {
   try {
     const [, userToken] = queryKey;
