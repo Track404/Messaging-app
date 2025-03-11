@@ -1,8 +1,23 @@
 import userImg from '../assets/userImg.webp';
 import { Settings, MessageSquarePlus, Home, Pencil } from 'lucide-react';
-import { useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
+import { useState, useContext } from 'react';
+import { CurrentUserContext } from '../context/createContext';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getUniqueUser } from '../api/user';
 function UserPage() {
+  const userToken = useContext(CurrentUserContext);
+  const queryClient = useQueryClient();
   const [isActive, setIsActive] = useState(false);
+  const navigate = useNavigate();
+
+  const { data } = useQuery({
+    queryKey: ['userInfo', userToken],
+    queryFn: getUniqueUser,
+    enabled: !!userToken,
+  });
+
   return (
     <>
       <div className="h-screen flex flex-col shadow-2xl ">
@@ -57,40 +72,6 @@ function UserPage() {
                   </div>
                 </div>
 
-                <div>
-                  <label
-                    htmlFor="status"
-                    className="block text-black-800 font-semibold text-lg xl:text-xl"
-                  >
-                    Status
-                  </label>
-                  <div className="mt-2 ">
-                    <input
-                      type="text"
-                      id="status"
-                      name="status"
-                      className="block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="info"
-                    className="block text-black-800 font-semibold text-lg xl:text-xl"
-                  >
-                    Info
-                  </label>
-                  <div className="mt-2 mb-6">
-                    <textarea
-                      name="info"
-                      id="info"
-                      maxLength="100"
-                      className="block w-75 h-30 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85"
-                    ></textarea>
-                  </div>
-                </div>
-
                 <button className="group/button lg:col-span-full w-full relative inline-flex items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-10 py-2 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20">
                   <span
                     onClick={() => {
@@ -126,27 +107,16 @@ function UserPage() {
                   Username
                 </h2>
                 <p className="text-lg font-medium lg:text-xl">
-                  this is my name
+                  {data?.data?.user.name}
                 </p>
               </div>
               <div>
                 <h2 className="font-bold text-3xl mb-4 lg:text-4xl">Email</h2>
                 <p className="text-lg font-medium lg:text-xl">
-                  this is my email
+                  {data?.data?.user.email}
                 </p>
               </div>
-              <div>
-                <h2 className="font-bold text-3xl mb-4 lg:text-4xl">Status</h2>
-                <p className="text-lg font-medium lg:text-xl">
-                  this is my status
-                </p>
-              </div>
-              <div>
-                <h2 className="font-bold text-3xl mb-4 lg:text-4xl"> Info</h2>
-                <p className="text-lg font-medium lg:text-xl">
-                  this is my info
-                </p>
-              </div>
+
               <button
                 onClick={() => {
                   setIsActive(!isActive);
@@ -162,29 +132,30 @@ function UserPage() {
           </>
         )}
         <div className="flex justify-around items-center border-t-2 h-30 bg-neutral-50">
-          <button className="hover:scale-110 cursor-pointer">
+          <button
+            onClick={() => {
+              navigate('/interface');
+            }}
+            className="hover:scale-110 cursor-pointer"
+          >
             <div className="flex flex-col items-center ">
               <Home strokeWidth="1.25" className="w-11 h-11 text-amber-400" />
               <p className="font-medium text-lg">Home</p>
             </div>
           </button>
 
-          <button className="hover:scale-110 cursor-pointer">
+          <button
+            onClick={() => {
+              navigate('/newDiscussion');
+            }}
+            className="hover:scale-110 cursor-pointer"
+          >
             <div className="flex flex-col items-center ">
               <MessageSquarePlus
                 strokeWidth="1.25"
                 className="w-11 h-11 text-amber-400"
               />
               <p className="font-medium text-lg">New Discussion</p>
-            </div>
-          </button>
-          <button className="hover:scale-110 cursor-pointer">
-            <div className="flex flex-col items-center ">
-              <Settings
-                strokeWidth="1.25"
-                className="w-11 h-11 text-amber-400"
-              />
-              <p className="font-medium text-lg">Settings</p>
             </div>
           </button>
         </div>

@@ -4,6 +4,7 @@ import {
   MessageSquareText,
   MessageSquarePlus,
   SendHorizontal,
+  Settings,
 } from 'lucide-react';
 import Discussion from '../components/discussion';
 import { useNavigate } from 'react-router-dom';
@@ -123,9 +124,17 @@ function MainPage() {
     <>
       <div className="md:flex md:justify-center h-screen">
         <div className="h-screen flex flex-col shadow-2xl md:w-[60vw] relative">
-          <div className="shadow-md ">
-            <h2 className="text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
+          <div className=" flex shadow-md ">
+            <h2 className="flex items-center justify-between text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
               THE HIVE
+              <button
+                onClick={() => {
+                  navigate(`/userPage/${userToken}`);
+                }}
+                className="hover:scale-110 active:scale-100"
+              >
+                <Settings size={40} />
+              </button>
             </h2>
           </div>
           <div className="h-full  overflow-auto">
