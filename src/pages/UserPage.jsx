@@ -117,7 +117,7 @@ function UserPage() {
                       className={`block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset 
                         focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85
                         ${
-                          invalidInput?.username
+                          invalidInput?.name
                             ? 'ring-red-500 focus:outline-red-500'
                             : 'ring-gray-400'
                         }`}
@@ -167,7 +167,7 @@ function UserPage() {
               </form>
               {validationErrors && (
                 <>
-                  <div className="flex justify-center w-full mb-10">
+                  <div className="flex justify-center w-full ">
                     <Alert
                       variant="filled"
                       severity="error"

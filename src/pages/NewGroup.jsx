@@ -5,6 +5,7 @@ import {
   Undo2,
   Send,
 } from 'lucide-react';
+import { Alert } from '@mui/material';
 import userImg from '../assets/userImg.webp';
 import UserCard from '../components/UserCard';
 
@@ -25,6 +26,8 @@ function NewGroup() {
   const queryClient = useQueryClient();
   const [newMessage, setNewmessage] = useState('');
   const [groupName, setGroupName] = useState('');
+  const [invalidInput, setInvalidInput] = useState(null);
+  const [validationErrors, setValidationErrors] = useState(null);
   const [userSendId, setUserSendId] = useState([{ id: userToken, name: '' }]);
   const navigate = useNavigate();
 
@@ -38,7 +41,8 @@ function NewGroup() {
     mutationFn: createGroup,
     onSuccess: (data, { messageToSend, usersIds }) => {
       console.log('Group created successfully');
-
+      setValidationErrors(null);
+      setInvalidInput(null);
       const chatId = data?.group?.id;
       if (chatId) {
         // Add users to the group
@@ -59,7 +63,15 @@ function NewGroup() {
       queryClient.invalidateQueries(['ChatDetails']);
     },
     onError: (error) => {
-      console.error('Error creating chat:', error);
+      if (error?.data?.errors) {
+        setValidationErrors(error.data.errors);
+        const newErrors = {};
+        error.data.errors.forEach((err) => {
+          newErrors[err.path] = err.msg;
+        });
+        setInvalidInput(newErrors);
+        console.log(invalidInput);
+      }
     },
   });
 
@@ -86,18 +98,12 @@ function NewGroup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!userSendId.length) {
-      console.warn('No users selected for the group.');
+    if (userSendId.length <= 1) {
+      console.warn('min is 2 users');
       return;
     }
-    if (!groupName) {
-      console.warn('No groupName for the group.');
-      return;
-    }
-
     const messageToSend = newMessage.trim();
-
+    setValidationErrors(null);
     addUserMutation({
       data: { name: groupName },
       messageToSend,
@@ -130,6 +136,25 @@ function NewGroup() {
             </div>
           </button>
           <div className="border-b-2 text-2xl font-bold p-4">
+            {validationErrors && (
+              <>
+                <div className="flex justify-center w-full mb-2">
+                  <Alert
+                    variant="filled"
+                    severity="error"
+                    className=" flex  items-center"
+                  >
+                    <ul>
+                      {validationErrors.map((err, index) => (
+                        <li key={index} style={{ color: 'white' }}>
+                          {err.msg}
+                        </li>
+                      ))}
+                    </ul>
+                  </Alert>
+                </div>
+              </>
+            )}
             <div className="flex flex-col items-center gap-2 ">
               <label htmlFor="groupName">GroupName</label>
               <input
@@ -137,7 +162,13 @@ function NewGroup() {
                 id="groupName"
                 name="groupName"
                 placeholder="Enter a group name"
-                className="block w-full h-10 ml-5 mr-5 bg-white rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-150"
+                className={`block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset 
+                    focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85
+                    ${
+                      invalidInput?.name
+                        ? 'ring-red-500 focus:outline-red-500'
+                        : 'ring-gray-400'
+                    }`}
                 value={groupName}
                 onChange={(e) => setGroupName(e.target.value)}
               />
