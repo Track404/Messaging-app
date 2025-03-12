@@ -18,7 +18,7 @@ function Discussion({ name, message, userId, chatType }) {
         onClick={() => {
           navigate(`/userDiscussion/${typeConvo}/${userId}`);
         }}
-        className="flex w-full h-28  items-center overflow-hidden shadow-sm hover:scale-105"
+        className="flex w-full h-28  items-center overflow-hidden shadow-sm hover:scale-105 active:scale-100"
       >
         <img
           src={userImg}

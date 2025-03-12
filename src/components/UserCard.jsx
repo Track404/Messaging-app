@@ -6,7 +6,7 @@ function UserCard({ name, onClick }) {
     <>
       <div
         onClick={onClick}
-        className="flex w-full h-28  items-center overflow-hidden shadow-sm hover:scale-105"
+        className="flex w-full h-28  items-center overflow-hidden shadow-sm hover:scale-105 active:scale-100"
       >
         <img src={userImg} alt="here" className="rounded-full h-15 w-15 m-3" />
         <div className="flex-1 min-w-0">
