@@ -1,6 +1,6 @@
 import userImg from '../assets/userImg.webp';
 import { MessageSquarePlus, Home, Pencil } from 'lucide-react';
-
+import { Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import { CurrentUserContext } from '../context/createContext';
@@ -10,7 +10,11 @@ function UserPage() {
   const userToken = useContext(CurrentUserContext);
   const queryClient = useQueryClient();
   const [isActive, setIsActive] = useState(false);
+  const [alertIsActive, setAlertisActive] = useState(false);
   const [userInfo, setUserInfo] = useState({ name: '', email: '' });
+  const [baseInfo, setBaseInfo] = useState({ name: '', email: '' });
+  const [invalidInput, setInvalidInput] = useState(null);
+  const [validationErrors, setValidationErrors] = useState(null);
   const navigate = useNavigate();
 
   const { data } = useQuery({
@@ -20,40 +24,68 @@ function UserPage() {
   });
   useEffect(() => {
     if (data) {
+      setBaseInfo(data.data.user);
       setUserInfo(data.data.user);
     }
   }, [data]);
 
-  const { mutate: addUserMutation } = useMutation({
+  const { mutate: addUserMutation, isSuccess } = useMutation({
     mutationFn: ({ data, userId }) => updateUser({ data, userId }),
 
     onSuccess: () => {
       console.log('UpdateUser sent successfully');
+      setIsActive(!isActive);
+      setValidationErrors(null);
+      setInvalidInput(null);
+      setAlertisActive(!alertIsActive);
+      setTimeout(() => {
+        setAlertisActive(false);
+      }, 3000);
       queryClient.invalidateQueries(['userInfo']);
     },
 
     onError: (error) => {
-      console.error('Error sending message:', error);
+      if (error?.data?.errors) {
+        setValidationErrors(error.data.errors);
+        const newErrors = {};
+        error.data.errors.forEach((err) => {
+          newErrors[err.path] = err.msg;
+        });
+        setInvalidInput(newErrors);
+        console.log(invalidInput);
+      }
     },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!userInfo) return;
+    if (userInfo.name === baseInfo.name && userInfo.email === baseInfo.email) {
+      setIsActive(!isActive);
+      return;
+    }
     addUserMutation({
       data: { name: userInfo.name, email: userInfo.email }, // Pass the message content
       userId: userToken, // Pass the user ID (your token)
     });
-    setIsActive(!isActive);
   };
   return (
     <>
-      <div className="h-screen flex flex-col shadow-2xl ">
+      <div className="h-screen flex flex-col shadow-2xl relative ">
         <div className="shadow-md ">
           <h2 className="text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
             PROFILE
           </h2>
         </div>
+        {alertIsActive && isSuccess && (
+          <>
+            <div className="flex justify-center w-full mt-10 absolute top-12">
+              <Alert variant="filled" severity="success" className="w-2/3 ">
+                User Info Change Successfully
+              </Alert>
+            </div>
+          </>
+        )}
         {isActive ? (
           <>
             <div className="h-full flex flex-col  items-center  ">
@@ -82,7 +114,13 @@ function UserPage() {
                       type="text"
                       id="username"
                       name="username"
-                      className="block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85"
+                      className={`block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset 
+                        focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85
+                        ${
+                          invalidInput?.username
+                            ? 'ring-red-500 focus:outline-red-500'
+                            : 'ring-gray-400'
+                        }`}
                       value={userInfo.name}
                       onChange={(e) => {
                         setUserInfo({ ...userInfo, name: e.target.value });
@@ -102,7 +140,13 @@ function UserPage() {
                       type="text"
                       id="email"
                       name="email"
-                      className="block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85"
+                      className={`block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset 
+                        focus:text-gray-800 focus:outline-amber-400 xl:h-11 xl:w-85
+                        ${
+                          invalidInput?.email
+                            ? 'ring-red-500 focus:outline-red-500'
+                            : 'ring-gray-400'
+                        }`}
                       value={userInfo.email}
                       onChange={(e) => {
                         setUserInfo({ ...userInfo, email: e.target.value });
@@ -121,6 +165,25 @@ function UserPage() {
                   </div>
                 </button>
               </form>
+              {validationErrors && (
+                <>
+                  <div className="flex justify-center w-full mb-10">
+                    <Alert
+                      variant="filled"
+                      severity="error"
+                      className=" flex  items-center"
+                    >
+                      <ul>
+                        {validationErrors.map((err, index) => (
+                          <li key={index} style={{ color: 'white' }}>
+                            -{err.msg}
+                          </li>
+                        ))}
+                      </ul>
+                    </Alert>
+                  </div>
+                </>
+              )}
             </div>
           </>
         ) : (
