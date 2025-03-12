@@ -5,14 +5,15 @@ import {
   MessageSquarePlus,
   SendHorizontal,
   Undo2,
+  Settings,
 } from 'lucide-react';
 import Discussion from '../components/discussion';
+import ChatName from '../components/ChatName';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import { CurrentUserContext } from '../context/createContext';
 import { getUserChats } from '../api/user';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-
 import { getChatDetails } from '../api/chat';
 import { getGroupDetails } from '../api/group';
 import { postMessageGroup } from '../api/group';
@@ -134,8 +135,16 @@ function UserDiscussion() {
       <div className="md:flex md:justify-center h-screen">
         <div className="hidden md:h-screen md:flex md:flex-col md:shadow-2xl md:w-[60vw] relative">
           <div className="shadow-md ">
-            <h2 className="text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
+            <h2 className="flex items-center justify-between text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
               THE HIVE
+              <button
+                onClick={() => {
+                  navigate(`/userPage/${userToken}`);
+                }}
+                className="hover:scale-110 active:scale-100"
+              >
+                <Settings size={40} />
+              </button>
             </h2>
           </div>
           <div className="h-full  overflow-auto">
@@ -247,7 +256,7 @@ function UserDiscussion() {
         <div className=" flex flex-col w-full md:h-screen">
           <div className="flex flex-col w-full h-screen bg-[url(./assets/messageBackgournd.svg)] bg-contain">
             <div className="bg-white w-full shadow-3xl border-b-1">
-              <Discussion
+              <ChatName
                 name={
                   chatDetails?.data?.chat?.users2.name ||
                   chatDetails?.data?.group?.name

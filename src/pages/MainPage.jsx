@@ -7,6 +7,7 @@ import {
   Settings,
 } from 'lucide-react';
 import Discussion from '../components/discussion';
+import ChatName from '../components/ChatName';
 import { useNavigate } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import { CurrentUserContext } from '../context/createContext';
@@ -247,10 +248,10 @@ function MainPage() {
           <div className="flex flex-col w-full h-screen md:bg-[url(./assets/messageBackgournd.svg)] md:bg-contain">
             <div className="bg-white w-full shadow-3xl border-b-1">
               {chatDetails?.data?.chat?.name && (
-                <Discussion name={chatDetails?.data?.chat?.users1.name} />
+                <ChatName name={chatDetails?.data?.chat?.users1.name} />
               )}
               {chatDetails?.data?.group?.name && (
-                <Discussion name={chatDetails?.data?.group?.name} />
+                <ChatName name={chatDetails?.data?.group?.name} />
               )}
             </div>
 

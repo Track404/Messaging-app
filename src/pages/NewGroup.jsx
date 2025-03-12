@@ -124,7 +124,7 @@ function NewGroup() {
             }}
             className="border-b-2 text-2xl font-bold p-4"
           >
-            <div className="flex items-center gap-2 ">
+            <div className="flex items-center gap-2 hover:scale-105 active:scale-100 ">
               <Users className="w-11 h-11 text-amber-400" />
               <h2>New Disscussion</h2>
             </div>
