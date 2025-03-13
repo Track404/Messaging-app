@@ -7,6 +7,7 @@ import { useState, useContext, useEffect } from 'react';
 import { CurrentUserContext } from '../context/createContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getUniqueUser, updateUser } from '../api/user';
+import { LogoutUser } from '../api/authentification';
 function UserPage() {
   const userToken = useContext(CurrentUserContext);
   const queryClient = useQueryClient();
@@ -59,6 +60,29 @@ function UserPage() {
     },
   });
 
+  const { mutate: addLogoutMutation } = useMutation({
+    mutationFn: LogoutUser,
+
+    onSuccess: () => {
+      console.log('Logout sent successfully');
+      navigate('/login');
+
+      queryClient.invalidateQueries([
+        'userInfo',
+        'chats',
+        'LastChatDetails,allUsers',
+      ]);
+    },
+
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+  const handleLogout = (e) => {
+    e.preventDefault();
+
+    addLogoutMutation();
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!userInfo) return;
@@ -281,9 +305,7 @@ function UserPage() {
               </div>
             </button>
             <button
-              onClick={() => {
-                navigate('/login');
-              }}
+              onClick={handleLogout}
               className="hover:scale-110 cursor-pointer"
             >
               <div className="flex flex-col items-center ">
