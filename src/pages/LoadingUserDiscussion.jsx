@@ -5,19 +5,18 @@ import {
   MessageSquarePlus,
   SendHorizontal,
   Settings,
-  Undo2,
 } from 'lucide-react';
 import LoadingCard from '../components/LoadingUser';
 
 import ProtectedPage from '../components/ProtectedRoute';
 
-function LoadingPageUser() {
+function LoadingPage() {
   const count = 8;
   return (
     <ProtectedPage>
       <>
-        <div className=" md:flex md:justify-center h-screen">
-          <div className="hidden md:h-screen md:flex md:flex-col md:shadow-2xl md:min-w-[50vw] xl:min-w-[30vw] relative">
+        <div className="md:flex md:justify-center h-screen">
+          <div className="h-screen flex flex-col shadow-2xl md:min-w-[50vw] xl:min-w-[30vw] relative">
             <div className=" flex shadow-md ">
               <h2 className="flex items-center justify-between text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
                 THE HIVE
@@ -71,19 +70,12 @@ function LoadingPageUser() {
               </button>
             </div>
           </div>
-          <div className="  flex flex-col w-full h-screen">
-            <div className="flex flex-col w-full h-screen bg-[url(./assets/messageBackgournd.svg)] bg-contain">
+          <div className="hidden w-0 md:flex md:flex-col md:w-full md:h-screen">
+            <div className="flex flex-col w-full h-screen md:bg-[url(./assets/messageBackgournd.svg)] md:bg-contain">
               <div className="bg-white w-full shadow-3xl border-b-1">
                 <LoadingCard />
               </div>
-              <button className="hover:scale-110 cursor-pointer absolute top-8 right-5 md:hidden">
-                <div className="flex flex-col items-center ">
-                  <Undo2
-                    strokeWidth="1.25"
-                    className="w-11 h-11 text-amber-400"
-                  />
-                </div>
-              </button>
+
               <div className="flex  overflow-y-auto w-full flex-grow">
                 <div className="flex-col gap-4 w-full flex items-center justify-center">
                   <div className="flex justify-center items-center h-screen">
@@ -122,4 +114,4 @@ function LoadingPageUser() {
   );
 }
 
-export default LoadingPageUser;
+export default LoadingPage;

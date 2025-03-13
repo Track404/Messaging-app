@@ -9,6 +9,7 @@ import NewGroup from './pages/NewGroup';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { CurrentUserContext } from './context/createContext';
+import LoadingPageUser from './pages/LoadingPage';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
   {
     path: '/userDiscussion/:chatType/:id',
     element: <UserDiscussion />,
+  },
+  {
+    path: '/loading',
+    element: <LoadingPageUser />,
   },
   {
     path: '/userPage/:id',

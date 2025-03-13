@@ -119,7 +119,7 @@ function NewGroup() {
     <ProtectedPage>
       <>
         <div className="md:flex md:justify-center h-screen">
-          <div className="h-screen flex flex-col shadow-2xl md:min-w-[40vw] relative">
+          <div className="h-screen flex flex-col shadow-2xl md:min-w-[40vw] xl:min-w-[30vw] relative">
             <div className="shadow-md ">
               <h2 className="text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
                 NEW GROUP

@@ -129,7 +129,7 @@ function MainPage() {
     <ProtectedPage>
       <>
         <div className="md:flex md:justify-center h-screen">
-          <div className="h-screen flex flex-col shadow-2xl md:min-w-[50vw] relative">
+          <div className="h-screen flex flex-col shadow-2xl md:min-w-[50vw] xl:min-w-[30vw] relative">
             <div className=" flex shadow-md ">
               <h2 className="flex items-center justify-between text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
                 THE HIVE

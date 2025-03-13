@@ -10,6 +10,7 @@ import {
 import Discussion from '../components/discussion';
 import ChatName from '../components/ChatName';
 import ProtectedPage from '../components/ProtectedRoute';
+import LoadingPageUser from './LoadingPage';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import { CurrentUserContext } from '../context/createContext';
@@ -31,13 +32,13 @@ function UserDiscussion() {
   const [newMessage, setNewmessage] = useState('');
   const navigate = useNavigate();
 
-  const { data } = useQuery({
+  const { data, isLoading: chatLoading } = useQuery({
     queryKey: ['chats', userToken],
     queryFn: getUserChats,
     enabled: !!userToken,
   });
 
-  const { data: chatDetails } = useQuery({
+  const { data: chatDetails, isLoading: chatDetailsLoading } = useQuery({
     queryKey: ['ChatDetails', params],
     queryFn: async () => {
       if (params?.chatType === 'chat') {
@@ -131,11 +132,16 @@ function UserDiscussion() {
       setFilterData(allChats); // Show all
     }
   };
+
+  const isLoading = chatLoading || chatDetailsLoading;
+  if (isLoading) {
+    return <LoadingPageUser />;
+  }
   return (
     <ProtectedPage>
       <>
         <div className="md:flex md:justify-center h-screen">
-          <div className="hidden md:h-screen md:flex md:flex-col md:shadow-2xl md:w-[60vw] relative">
+          <div className="hidden md:h-screen md:flex md:flex-col md:shadow-2xl md:min-w-[50vw] xl:min-w-[30vw] relative">
             <div className="shadow-md ">
               <h2 className="flex items-center justify-between text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
                 THE HIVE
