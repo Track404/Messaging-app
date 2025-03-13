@@ -60,9 +60,9 @@ function App() {
   }, []);
   return (
     <>
-      <CurrentUserContext value={userToken}>
+      <CurrentUserContext.Provider value={userToken}>
         <RouterProvider router={router} />
-      </CurrentUserContext>
+      </CurrentUserContext.Provider>
     </>
   );
 }

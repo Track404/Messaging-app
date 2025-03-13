@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import Discussion from '../components/discussion';
 import ChatName from '../components/ChatName';
+import LoadingPage from './LoadingPage';
 import ProtectedPage from '../components/ProtectedRoute';
 import { useNavigate } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
@@ -30,13 +31,13 @@ function MainPage() {
   const [newMessage, setNewmessage] = useState('');
   const navigate = useNavigate();
 
-  const { data } = useQuery({
+  const { data, isLoading: chatLoading } = useQuery({
     queryKey: ['chats', userToken],
     queryFn: getUserChats,
     enabled: !!userToken,
   });
 
-  const { data: chatDetails, isLoading } = useQuery({
+  const { data: chatDetails, isLoading: chatDetailsLoading } = useQuery({
     queryKey: ['lastChatDetails', lastChat?.id],
     queryFn: async () => {
       if (lastChat?.chatType === 'chats1' || lastChat?.chatType === 'chats2') {
@@ -76,8 +77,6 @@ function MainPage() {
   };
   useEffect(() => {
     if (data) {
-      console.log('Setting Filter Data:', data);
-
       const userChats = data.data.user;
 
       // Extract and sort chats once
@@ -122,15 +121,15 @@ function MainPage() {
       setFilterData(allChats); // Show all
     }
   };
-
+  const isLoading = chatLoading || chatDetailsLoading;
   if (isLoading) {
-    return <>Loading</>;
+    return <LoadingPage />;
   }
   return (
     <ProtectedPage>
       <>
         <div className="md:flex md:justify-center h-screen">
-          <div className="h-screen flex flex-col shadow-2xl md:w-[60vw] relative">
+          <div className="h-screen flex flex-col shadow-2xl md:min-w-[50vw] relative">
             <div className=" flex shadow-md ">
               <h2 className="flex items-center justify-between text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
                 THE HIVE
