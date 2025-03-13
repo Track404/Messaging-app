@@ -8,6 +8,7 @@ import {
 import { Alert } from '@mui/material';
 import userImg from '../assets/userImg.webp';
 import UserCard from '../components/UserCard';
+import LoadingNewGroup from './LoadingPageNewGroup';
 import ProtectedPage from '../components/ProtectedRoute';
 import { useNavigate } from 'react-router-dom';
 import { useState, useContext } from 'react';
@@ -31,7 +32,7 @@ function NewGroup() {
   const [userSendId, setUserSendId] = useState([{ id: userToken, name: '' }]);
   const navigate = useNavigate();
 
-  const { data: allUsers } = useQuery({
+  const { data: allUsers, isLoading } = useQuery({
     queryKey: ['allUsers', userToken],
     queryFn: getAllUsers,
     enabled: !!userToken,
@@ -114,7 +115,9 @@ function NewGroup() {
     setGroupName('');
     setNewmessage('');
   };
-
+  if (isLoading) {
+    return <LoadingNewGroup />;
+  }
   return (
     <ProtectedPage>
       <>
