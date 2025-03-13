@@ -1,9 +1,12 @@
+import { User } from 'lucide-react';
+
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { LoginUser } from '../api/authentification';
 import { useState } from 'react';
 import { Alert } from '@mui/material';
+
 function LoginPage() {
   const [userInfo, setUserInfo] = useState({
     email: '',
@@ -123,13 +126,37 @@ function LoginPage() {
                 </div>
               </div>
 
-              <button className="group/button w-full relative inline-flex items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-10 py-2 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20">
+              <button
+                type="submit"
+                className="group/button w-full relative inline-flex items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-10 py-2 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20"
+              >
                 <span className="text-lg">Log In</span>
                 <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-13deg)_translateX(-100%)] group-hover/button:duration-1000 group-hover/button:[transform:skew(-13deg)_translateX(100%)]">
                   <div className="relative h-full w-10 bg-white/20"></div>
                 </div>
               </button>
+              <button
+                onClick={() => {
+                  addUserMutation({
+                    data: {
+                      name: 'Guest User',
+                      email: 'guest.user@gmail.com',
+                      password: 'abcd',
+                      confirmPassword: 'abcd',
+                    },
+                  });
+                }}
+                type="button"
+                className="group/button w-full mt-4 relative inline-flex gap-1 items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-5 py-2 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20"
+              >
+                <User />
+                <span className="text-lg">Guest User</span>
+                <div className="absolute inset-0 flex  h-full w-full justify-center [transform:skew(-13deg)_translateX(-100%)] group-hover/button:duration-1000 group-hover/button:[transform:skew(-13deg)_translateX(100%)]">
+                  <div className="relative h-full w-10 bg-white/20"></div>
+                </div>
+              </button>
             </form>
+
             <div className="flex gap-1 text-sm mt-2 font-light text-gray-500">
               <p>Already have an account? </p>
               <Link to="/register" className="text-amber-400">

@@ -14,6 +14,7 @@ function UserPage() {
   const [alertIsActive, setAlertisActive] = useState(false);
   const [userInfo, setUserInfo] = useState({ name: '', email: '' });
   const [baseInfo, setBaseInfo] = useState({ name: '', email: '' });
+  const [guestUser, setGuestUser] = useState(false);
   const [invalidInput, setInvalidInput] = useState(null);
   const [validationErrors, setValidationErrors] = useState(null);
   const navigate = useNavigate();
@@ -61,6 +62,14 @@ function UserPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!userInfo) return;
+    if (
+      !baseInfo.name === 'Guest User' ||
+      baseInfo.email === 'guest.user@gmail.com'
+    ) {
+      setGuestUser(true);
+      return;
+    }
+
     if (userInfo.name === baseInfo.name && userInfo.email === baseInfo.email) {
       setIsActive(!isActive);
       return;
@@ -169,7 +178,7 @@ function UserPage() {
                 </form>
                 {validationErrors && (
                   <>
-                    <div className="flex justify-center w-full ">
+                    <div className="flex justify-center w-full mb-20 ">
                       <Alert
                         variant="filled"
                         severity="error"
@@ -182,6 +191,19 @@ function UserPage() {
                             </li>
                           ))}
                         </ul>
+                      </Alert>
+                    </div>
+                  </>
+                )}
+                {guestUser && (
+                  <>
+                    <div className="flex justify-center w-full mb-20 ">
+                      <Alert
+                        variant="filled"
+                        severity="error"
+                        className=" flex  items-center"
+                      >
+                        <p>Cannot change Guest User information </p>
                       </Alert>
                     </div>
                   </>
