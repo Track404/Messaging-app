@@ -9,7 +9,7 @@ import NewGroup from './pages/NewGroup';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { CurrentUserContext } from './context/createContext';
-import LoadingPageUser from './pages/LoadingPage';
+import LoadingNewDisccusion from './pages/LoadingPageNewDisccusion';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/loading',
-    element: <LoadingPageUser />,
+    element: <LoadingNewDisccusion />,
   },
   {
     path: '/userPage/:id',
