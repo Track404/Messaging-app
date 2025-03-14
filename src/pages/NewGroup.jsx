@@ -12,7 +12,7 @@ import LoadingNewGroup from './LoadingPageNewGroup';
 import ProtectedPage from '../components/ProtectedRoute';
 import { useNavigate } from 'react-router-dom';
 import { useState, useContext } from 'react';
-import { CurrentUserContext } from '../context/createContext';
+import { AuthContext } from '../context/createAuthContext';
 import { useQueryClient } from '@tanstack/react-query';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { getAllUsers } from '../api/user';
@@ -23,7 +23,7 @@ import {
   postMessageGroup,
 } from '../api/group';
 function NewGroup() {
-  const userToken = useContext(CurrentUserContext);
+  const { userToken } = useContext(AuthContext);
   const queryClient = useQueryClient();
   const [newMessage, setNewmessage] = useState('');
   const [groupName, setGroupName] = useState('');

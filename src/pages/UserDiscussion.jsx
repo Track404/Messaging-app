@@ -13,7 +13,7 @@ import ProtectedPage from '../components/ProtectedRoute';
 import LoadingPageUser from './LoadingPage';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
-import { CurrentUserContext } from '../context/createContext';
+import { AuthContext } from '../context/createAuthContext';
 import { getUserChats } from '../api/user';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getChatDetails } from '../api/chat';
@@ -22,7 +22,7 @@ import { postMessageGroup } from '../api/group';
 import { postMessageChat } from '../api/chat';
 
 function UserDiscussion() {
-  const userToken = useContext(CurrentUserContext);
+  const { userToken } = useContext(AuthContext);
   const queryClient = useQueryClient();
   const params = useParams();
   const [allChats, setAllChats] = useState(null);

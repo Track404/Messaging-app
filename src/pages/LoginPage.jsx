@@ -6,12 +6,15 @@ import { useMutation } from '@tanstack/react-query';
 import { LoginUser } from '../api/authentification';
 import { useState } from 'react';
 import { Alert } from '@mui/material';
+import { useContext } from 'react';
+import { AuthContext } from '../context/createAuthContext';
 
 function LoginPage() {
   const [userInfo, setUserInfo] = useState({
     email: '',
     password: '',
   });
+  const { updateToken } = useContext(AuthContext);
   const [validationErrors, setValidationErrors] = useState(null);
   const [invalidInput, setInvalidInput] = useState(null);
   const navigate = useNavigate();
@@ -31,7 +34,7 @@ function LoginPage() {
     },
     onSuccess: (data) => {
       console.log('success');
-      localStorage.setItem('token', data.token);
+      updateToken(data.token);
       setValidationErrors(null);
       setInvalidInput(null);
       setTimeout(() => {
@@ -158,7 +161,7 @@ function LoginPage() {
             </form>
 
             <div className="flex gap-1 text-sm mt-2 font-light text-gray-500">
-              <p>Already have an account? </p>
+              <p>Dont have an account yet? </p>
               <Link to="/register" className="text-amber-400">
                 Register
               </Link>

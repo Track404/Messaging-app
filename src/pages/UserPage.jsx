@@ -4,12 +4,12 @@ import { MessageSquarePlus, Home, Pencil, LogOut } from 'lucide-react';
 import { Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
-import { CurrentUserContext } from '../context/createContext';
+import { AuthContext } from '../context/createAuthContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getUniqueUser, updateUser } from '../api/user';
 import { LogoutUser } from '../api/authentification';
 function UserPage() {
-  const userToken = useContext(CurrentUserContext);
+  const { userToken } = useContext(AuthContext);
   const queryClient = useQueryClient();
   const [isActive, setIsActive] = useState(false);
   const [alertIsActive, setAlertisActive] = useState(false);

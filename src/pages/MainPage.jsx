@@ -12,16 +12,16 @@ import LoadingPage from './LoadingPage';
 import ProtectedPage from '../components/ProtectedRoute';
 import { useNavigate } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
-import { CurrentUserContext } from '../context/createContext';
+
 import { getUserChats } from '../api/user';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-
+import { AuthContext } from '../context/createAuthContext';
 import { getChatDetails } from '../api/chat';
 import { getGroupDetails } from '../api/group';
 import { postMessageChat } from '../api/chat';
 
 function MainPage() {
-  const userToken = useContext(CurrentUserContext);
+  const { userToken } = useContext(AuthContext);
   const queryClient = useQueryClient();
   const [allChats, setAllChats] = useState(null);
   const [filterData, setFilterData] = useState(null);

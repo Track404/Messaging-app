@@ -6,9 +6,9 @@ import NewDisccusion from './pages/NewDiscussion';
 import UserPage from './pages/UserPage';
 import UserDiscussion from './pages/UserDiscussion';
 import NewGroup from './pages/NewGroup';
-import { useEffect, useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
-import { CurrentUserContext } from './context/createContext';
+
+import { AuthProvider } from './context/createAuthContext';
+
 import LoadingNewDisccusion from './pages/LoadingPageNewDisccusion';
 import {
   createBrowserRouter,
@@ -55,19 +55,11 @@ const router = createBrowserRouter([
   },
 ]);
 function App() {
-  const [userToken, setUserToken] = useState('');
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      setUserToken(decodedToken.id);
-    }
-  }, []);
   return (
     <>
-      <CurrentUserContext.Provider value={userToken}>
+      <AuthProvider>
         <RouterProvider router={router} />
-      </CurrentUserContext.Provider>
+      </AuthProvider>
     </>
   );
 }
