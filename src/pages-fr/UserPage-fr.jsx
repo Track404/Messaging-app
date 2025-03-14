@@ -109,14 +109,14 @@ function UserPageFr() {
         <div className="h-screen flex flex-col shadow-2xl relative ">
           <div className="shadow-md ">
             <h2 className="text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
-              PROFILE
+              PROFIL
             </h2>
           </div>
           {alertIsActive && isSuccess && (
             <>
               <div className="flex justify-center w-full mt-10 absolute top-12">
                 <Alert variant="filled" severity="success" className="w-2/3 ">
-                  User Info Change Successfully
+                  Modification des informations utilisateur réussie
                 </Alert>
               </div>
             </>
@@ -142,7 +142,7 @@ function UserPageFr() {
                       htmlFor="username"
                       className="block text-black-800 font-semibold text-lg xl:text-xl"
                     >
-                      Username
+                      Nom d‘utilisateur
                     </label>
                     <div className="mt-2 ">
                       <input
@@ -194,7 +194,7 @@ function UserPageFr() {
                     type="submit"
                     className="group/button lg:col-span-full w-full relative inline-flex items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-10 py-2 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20"
                   >
-                    <span className="text-lg">Confirm Change</span>
+                    <span className="text-lg">Confirmer le changement</span>
                     <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-13deg)_translateX(-100%)] group-hover/button:duration-1000 group-hover/button:[transform:skew(-13deg)_translateX(100%)]">
                       <div className="relative h-full w-10 bg-white/20"></div>
                     </div>
@@ -227,7 +227,10 @@ function UserPageFr() {
                         severity="error"
                         className=" flex  items-center"
                       >
-                        <p>Cannot change Guest User information </p>
+                        <p>
+                          Impossible de modifier les informations de
+                          l&lsquo;utilisateur invité
+                        </p>
                       </Alert>
                     </div>
                   </>
@@ -239,7 +242,7 @@ function UserPageFr() {
               <div className="grid grid-cols-1 lg:grid-cols-2 h-full  gap-1   justify-items-center items-center text-center">
                 <div className="flex flex-col justify-center items-center lg:col-span-full">
                   <h2 className="font-bold text-3xl lg:text-4xl ">
-                    Profile Image
+                    Image de profil
                   </h2>
                   <img
                     src={userImg}
@@ -250,7 +253,7 @@ function UserPageFr() {
 
                 <div className="">
                   <h2 className="font-bold text-3xl mb-4 lg:text-4xl">
-                    Username
+                    Nom d‘utilisateur
                   </h2>
                   <p className="text-lg font-medium lg:text-xl">
                     {userInfo && userInfo.name}
@@ -269,7 +272,7 @@ function UserPageFr() {
                   }}
                   className="group/button lg:col-span-full relative inline-flex items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-10 py-2 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20"
                 >
-                  <span className="text-lg">Change User Info</span>
+                  <span className="text-lg">Modifier les informations</span>
                   <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-13deg)_translateX(-100%)] group-hover/button:duration-1000 group-hover/button:[transform:skew(-13deg)_translateX(100%)]">
                     <div className="relative h-full w-10 bg-white/20"></div>
                   </div>
@@ -286,7 +289,7 @@ function UserPageFr() {
             >
               <div className="flex flex-col items-center ">
                 <Home strokeWidth="1.25" className="w-11 h-11 text-amber-400" />
-                <p className="font-medium text-lg">Home</p>
+                <p className="font-medium text-lg">Discussion</p>
               </div>
             </button>
 
@@ -301,7 +304,7 @@ function UserPageFr() {
                   strokeWidth="1.25"
                   className="w-11 h-11 text-amber-400"
                 />
-                <p className="font-medium text-lg">New Discussion</p>
+                <p className="font-medium text-lg">Nouvelle Discussion</p>
               </div>
             </button>
             <button
@@ -313,7 +316,7 @@ function UserPageFr() {
                   strokeWidth="1.25"
                   className="w-11 h-11 text-amber-400"
                 />
-                <p className="font-medium text-lg">Logout</p>
+                <p className="font-medium text-lg">Déconnexion</p>
               </div>
             </button>
           </div>

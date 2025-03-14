@@ -148,7 +148,7 @@ function UserDiscussionFr() {
                 LA RUCHE
                 <button
                   onClick={() => {
-                    navigate(`/userPage/${userToken}`);
+                    navigate(`/pageUtilisateur/${userToken}`);
                   }}
                   className="hover:scale-110 active:scale-100"
                 >
