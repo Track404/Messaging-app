@@ -202,6 +202,10 @@ function NewGroup() {
                 <h2 className=" flex font-bold text-lg ">
                   To:
                   {userSendId.map((user) => {
+                    if (userSendId.length <= 1) {
+                      return <>Select a user</>;
+                    }
+
                     return (
                       <>
                         <p key={user.id} className="pr-1">
@@ -210,7 +214,6 @@ function NewGroup() {
                       </>
                     );
                   })}
-                  Select a user
                 </h2>
               </div>
             </div>
@@ -260,6 +263,9 @@ function NewGroup() {
                     <h2 className=" flex font-bold text-lg ">
                       To:
                       {userSendId.map((user) => {
+                        if (userSendId.length <= 1) {
+                          return <>Select a user</>;
+                        }
                         return (
                           <>
                             <p key={user.id} className="pr-1">
@@ -268,7 +274,6 @@ function NewGroup() {
                           </>
                         );
                       })}
-                      Select a user
                     </h2>
                   </div>
                 </div>

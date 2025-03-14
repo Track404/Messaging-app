@@ -130,7 +130,7 @@ function NewGroupFr() {
             </div>
             <button
               onClick={() => {
-                navigate('/newDiscussion');
+                navigate('/nouvelleDiscussion');
               }}
               className="border-b-2 text-2xl font-bold p-4"
             >
