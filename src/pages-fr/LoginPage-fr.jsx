@@ -172,7 +172,7 @@ function LoginPageFr() {
               <>
                 <div className="flex justify-center w-full mt-10">
                   <Alert variant="filled" severity="success" className="w-2/3 ">
-                    Connexion Confirmer
+                    Connexion Confirmé
                   </Alert>
                 </div>
               </>

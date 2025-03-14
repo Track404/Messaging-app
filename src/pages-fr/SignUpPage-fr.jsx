@@ -25,7 +25,7 @@ function SignUpPageFr() {
       console.log('sucess');
       setValidationErrors(null);
       setTimeout(() => {
-        navigate('/login');
+        navigate('/connnexion');
       }, 3000);
     },
   });
@@ -58,17 +58,17 @@ function SignUpPageFr() {
       <div className="md:flex md:justify-center">
         <div>
           <h2 className="text-amber-400 text-4xl text-left font-semibold m-4 mb-25">
-            THE HIVE
+            LA RUCHE
           </h2>
 
           <div className="flex flex-col items-center md:w-[50vw] ">
             <div className="text-center">
               <h1 className="text-6xl font-semibold max-[400px]:w-75 xl:text-7xl max-w-range ">
-                Join The Hive !
+                Rejoignez la Ruche !
               </h1>
               <p className="text-xl xl:text-2xl xl:font-medium">
                 {' '}
-                Be part of a community
+                Faites partie d&lsquo;une communauté
               </p>
             </div>
 
@@ -78,7 +78,7 @@ function SignUpPageFr() {
                   htmlFor="name"
                   className="block text-black-800 font-semibold text-md xl:text-lg"
                 >
-                  Username
+                  Nom d&lsquo;utilisateur
                 </label>
                 <div className="mt-2 ">
                   <input
@@ -122,7 +122,7 @@ function SignUpPageFr() {
                   htmlFor="password"
                   className="block text-black-800 font-semibold text-md xl:text-lg"
                 >
-                  Password
+                  Mot de passe
                 </label>
                 <div className="mt-2 ">
                   <input
@@ -144,7 +144,7 @@ function SignUpPageFr() {
                   htmlFor="confirm-password"
                   className="block text-black-800 font-semibold text-md xl:text-lg"
                 >
-                  Confirm Password
+                  Confirmez le mot de passe
                 </label>
                 <div className="mt-2 mb-6">
                   <input
@@ -169,23 +169,23 @@ function SignUpPageFr() {
                 type="submit"
                 className="group/button w-full relative inline-flex items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-10 py-2 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20"
               >
-                <span className="text-lg">Sign Up</span>
+                <span className="text-lg">S&lsquo;inscrire</span>
                 <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-13deg)_translateX(-100%)] group-hover/button:duration-1000 group-hover/button:[transform:skew(-13deg)_translateX(100%)]">
                   <div className="relative h-full w-10 bg-white/20"></div>
                 </div>
               </button>
             </form>
             <div className="flex gap-1 text-sm mt-2 font-light text-gray-500">
-              <p>Already have an account? </p>
-              <Link to="/login" className="text-amber-400">
-                Login
+              <p>Vous avez déjà un compte ? </p>
+              <Link to="/connexion" className="text-amber-400">
+                Connnexion
               </Link>
             </div>
             {isSuccess && (
               <>
                 <div className="flex justify-center w-full mt-10">
                   <Alert variant="filled" severity="success" className="w-2/3 ">
-                    Confirm Register User
+                    Enregistrer l&lsquo;utilisateur Confirmé
                   </Alert>
                 </div>
               </>
