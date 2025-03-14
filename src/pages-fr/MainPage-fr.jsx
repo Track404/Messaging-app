@@ -132,10 +132,10 @@ function MainPageFr() {
           <div className="h-screen flex flex-col shadow-2xl md:min-w-[50vw] xl:min-w-[30vw] relative">
             <div className=" flex shadow-md ">
               <h2 className="flex items-center justify-between text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
-                THE HIVE
+                LA RUCHE
                 <button
                   onClick={() => {
-                    navigate(`/userPage/${userToken}`);
+                    navigate(`/pageUtilisateur/${userToken}`);
                   }}
                   className="hover:scale-110 active:scale-100"
                 >
@@ -196,7 +196,7 @@ function MainPageFr() {
 
               <button
                 onClick={() => {
-                  navigate(`/newDiscussion`);
+                  navigate(`/nouvelleDiscussion`);
                 }}
                 className="group/button absolute bottom-32 right-10 cursor-pointer inline-flex items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-3 py-3 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20"
               >
@@ -218,7 +218,7 @@ function MainPageFr() {
                     strokeWidth="1.25"
                     className="w-11 h-11 text-amber-400"
                   />
-                  <p className="font-medium text-lg">All</p>
+                  <p className="font-medium text-lg">Tout</p>
                 </div>
               </button>
 
@@ -247,7 +247,7 @@ function MainPageFr() {
                     strokeWidth="1.25"
                     className="w-11 h-11 text-amber-400"
                   />
-                  <p className="font-medium text-lg">Groups</p>
+                  <p className="font-medium text-lg">Groupes</p>
                 </div>
               </button>
             </div>
