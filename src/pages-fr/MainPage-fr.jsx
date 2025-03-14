@@ -6,7 +6,8 @@ import {
   SendHorizontal,
   Settings,
 } from 'lucide-react';
-import Discussion from '../components/discussion';
+
+import DiscussionFr from '../components/Discussion-fr';
 import ChatName from '../components/ChatName';
 import LoadingPageFr from './LoadingUserDiscussion-fr';
 import ProtectedPage from '../components/ProtectedRoute';
@@ -183,7 +184,7 @@ function MainPageFr() {
                         : chat.groupId;
 
                     return (
-                      <Discussion
+                      <DiscussionFr
                         key={crypto.randomUUID()}
                         name={name}
                         message={chat.messages?.[0]?.content}

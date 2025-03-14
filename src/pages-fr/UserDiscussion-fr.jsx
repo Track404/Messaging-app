@@ -7,7 +7,8 @@ import {
   Undo2,
   Settings,
 } from 'lucide-react';
-import Discussion from '../components/discussion';
+
+import DiscussionFr from '../components/Discussion-fr';
 import ChatName from '../components/ChatName';
 import ProtectedPage from '../components/ProtectedRoute';
 import LoadingPageUserFr from './LoadingPage-fr';
@@ -144,7 +145,7 @@ function UserDiscussionFr() {
           <div className="hidden md:h-screen md:flex md:flex-col md:shadow-2xl md:min-w-[50vw] xl:min-w-[30vw] relative">
             <div className="shadow-md ">
               <h2 className="flex items-center justify-between text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
-                THE HIVE
+                LA RUCHE
                 <button
                   onClick={() => {
                     navigate(`/userPage/${userToken}`);
@@ -195,7 +196,7 @@ function UserDiscussionFr() {
                         : chat.groupId;
 
                     return (
-                      <Discussion
+                      <DiscussionFr
                         key={crypto.randomUUID()}
                         name={name}
                         message={chat.messages?.[0]?.content}
@@ -230,7 +231,7 @@ function UserDiscussionFr() {
                     strokeWidth="1.25"
                     className="w-11 h-11 text-amber-400"
                   />
-                  <p className="font-medium text-lg">All</p>
+                  <p className="font-medium text-lg">Tout</p>
                 </div>
               </button>
 
@@ -259,7 +260,7 @@ function UserDiscussionFr() {
                     strokeWidth="1.25"
                     className="w-11 h-11 text-amber-400"
                   />
-                  <p className="font-medium text-lg">Groups</p>
+                  <p className="font-medium text-lg">Groupes</p>
                 </div>
               </button>
             </div>
