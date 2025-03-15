@@ -25,7 +25,7 @@ function SignUpPageFr() {
       console.log('sucess');
       setValidationErrors(null);
       setTimeout(() => {
-        navigate('/connnexion');
+        navigate('/connexion');
       }, 3000);
     },
   });

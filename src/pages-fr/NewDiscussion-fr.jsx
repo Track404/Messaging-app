@@ -5,7 +5,8 @@ import {
   Undo2,
   Send,
 } from 'lucide-react';
-import ProtectedPage from '../components/ProtectedRoute';
+
+import ProtectedPageFr from '../components/ProtectedRoute-fr';
 import UserCard from '../components/UserCard';
 import ChatName from '../components/ChatName';
 import LoadingNewDisccusionFr from './LoadingPageNewDisccusion-fr';
@@ -87,7 +88,7 @@ function NewDisccusionFr() {
     return <LoadingNewDisccusionFr />;
   }
   return (
-    <ProtectedPage>
+    <ProtectedPageFr>
       <>
         <div className="md:flex md:justify-center h-screen">
           <div className="h-screen flex flex-col shadow-2xl md:md:min-w-[40vw] xl:min-w-[30vw] relative">
@@ -200,7 +201,7 @@ function NewDisccusionFr() {
           </div>
         </div>
       </>
-    </ProtectedPage>
+    </ProtectedPageFr>
   );
 }
 

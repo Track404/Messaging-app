@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'https://messaging-app-backend-production-155b.up.railway.app/',
   headers: {
     'Content-Type': 'application/json',
   },

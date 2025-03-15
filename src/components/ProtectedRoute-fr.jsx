@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { SecureRoute } from '../api/authentification';
 
 // eslint-disable-next-line react/prop-types
-const ProtectedPage = ({ children }) => {
+const ProtectedPageFr = ({ children }) => {
   const navigate = useNavigate();
 
   const { error } = useQuery({
@@ -16,11 +16,11 @@ const ProtectedPage = ({ children }) => {
   // If authentication fails, redirect to login page
   useEffect(() => {
     if (error) {
-      navigate('/login');
+      navigate('/connexion');
     }
   }, [error, navigate]);
 
   return <>{children}</>;
 };
 
-export default ProtectedPage;
+export default ProtectedPageFr;

@@ -9,7 +9,8 @@ import { Alert } from '@mui/material';
 import userImg from '../assets/userImg.webp';
 import UserCard from '../components/UserCard';
 import LoadingNewGroupFr from './LoadingPageNewGroup-fr';
-import ProtectedPage from '../components/ProtectedRoute';
+
+import ProtectedPageFr from '../components/ProtectedRoute-fr';
 import { useNavigate } from 'react-router-dom';
 import { useState, useContext } from 'react';
 import { AuthContext } from '../context/createAuthContext';
@@ -119,7 +120,7 @@ function NewGroupFr() {
     return <LoadingNewGroupFr />;
   }
   return (
-    <ProtectedPage>
+    <ProtectedPageFr>
       <>
         <div className="md:flex md:justify-center h-screen">
           <div className="h-screen flex flex-col shadow-2xl md:min-w-[40vw] xl:min-w-[30vw] relative">
@@ -308,7 +309,7 @@ function NewGroupFr() {
           </div>
         </div>
       </>
-    </ProtectedPage>
+    </ProtectedPageFr>
   );
 }
 

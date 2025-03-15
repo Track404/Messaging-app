@@ -1,5 +1,6 @@
 import userImg from '../assets/userImg.webp';
-import ProtectedPage from '../components/ProtectedRoute';
+
+import ProtectedPageFr from '../components/ProtectedRoute-fr';
 import { MessageSquarePlus, Home, Pencil, LogOut } from 'lucide-react';
 import { Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -104,7 +105,7 @@ function UserPageFr() {
     });
   };
   return (
-    <ProtectedPage>
+    <ProtectedPageFr>
       <>
         <div className="h-screen flex flex-col shadow-2xl relative ">
           <div className="shadow-md ">
@@ -295,7 +296,7 @@ function UserPageFr() {
 
             <button
               onClick={() => {
-                navigate('/newDiscussion');
+                navigate('/nouvelleDiscussion');
               }}
               className="hover:scale-110 cursor-pointer"
             >
@@ -322,7 +323,7 @@ function UserPageFr() {
           </div>
         </div>
       </>
-    </ProtectedPage>
+    </ProtectedPageFr>
   );
 }
 

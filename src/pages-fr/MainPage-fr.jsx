@@ -10,7 +10,8 @@ import {
 import DiscussionFr from '../components/Discussion-fr';
 import ChatName from '../components/ChatName';
 import LoadingPageFr from './LoadingUserDiscussion-fr';
-import ProtectedPage from '../components/ProtectedRoute';
+
+import ProtectedPageFr from '../components/ProtectedRoute-fr';
 import { useNavigate } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 
@@ -127,7 +128,7 @@ function MainPageFr() {
     return <LoadingPageFr />;
   }
   return (
-    <ProtectedPage>
+    <ProtectedPageFr>
       <>
         <div className="md:flex md:justify-center h-screen">
           <div className="h-screen flex flex-col shadow-2xl md:min-w-[50vw] xl:min-w-[30vw] relative">
@@ -329,7 +330,7 @@ function MainPageFr() {
           </div>
         </div>
       </>
-    </ProtectedPage>
+    </ProtectedPageFr>
   );
 }
 
