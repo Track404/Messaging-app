@@ -20,23 +20,23 @@ function LoadingNewGroupFr() {
           <div className="h-screen flex flex-col shadow-2xl md:min-w-[40vw] xl:min-w-[30vw] relative">
             <div className="shadow-md ">
               <h2 className="text-white text-4xl text-left font-semibold p-4 w-full bg-[url(./assets/hive-background.svg)] bg-cover">
-                NEW GROUP
+                GROUPE
               </h2>
             </div>
             <button className="border-b-2 text-2xl font-bold p-4">
               <div className="flex items-center gap-2 hover:scale-105 active:scale-100 ">
                 <Users className="w-11 h-11 text-amber-400" />
-                <h2>New Disscussion</h2>
+                <h2>Nouvelle Disscussion</h2>
               </div>
             </button>
             <div className="border-b-2 text-2xl font-bold p-4">
               <div className="flex flex-col items-center gap-2 ">
-                <label htmlFor="groupName">GroupName</label>
+                <label htmlFor="groupName">Nom de groupe</label>
                 <input
                   type="text"
                   id="groupName"
                   name="groupName"
-                  placeholder="Enter a group name"
+                  placeholder="Entrez un nom de groupe"
                   className={`block w-75 h-10 rounded-md py-1.5 px-2 ring-1 ring-inset 
                       focus:text-gray-800 focus:outline-amber-400 ring-gray-400 xl:h-11 xl:w-85
                       }`}
@@ -53,7 +53,9 @@ function LoadingNewGroupFr() {
             <div className="border-t-2 text-2xl font-bold p-4 md:hidden">
               <div className="flex items-center gap-2 ">
                 <Send className="w-11 h-11 text-amber-400" />
-                <h2 className=" flex font-bold text-lg ">To: Select a user</h2>
+                <h2 className=" flex font-bold text-lg ">
+                  À: Sélectionner un utilisateur
+                </h2>
               </div>
             </div>
             <div className="flex justify-around items-center border-t-2 h-30 bg-neutral-50 ">
@@ -67,7 +69,7 @@ function LoadingNewGroupFr() {
                       strokeWidth="1.25"
                       className="w-11 h-11 text-amber-400"
                     />
-                    <p className="font-medium text-lg">Create Group</p>
+                    <p className="font-medium text-lg">Créer</p>
                   </div>
                 </button>
               </form>
@@ -78,7 +80,7 @@ function LoadingNewGroupFr() {
                     strokeWidth="1.25"
                     className="w-11 h-11 text-amber-400"
                   />
-                  <p className="font-medium text-lg">Go Back</p>
+                  <p className="font-medium text-lg">Retour</p>
                 </div>
               </button>
             </div>
@@ -95,7 +97,7 @@ function LoadingNewGroupFr() {
 
                   <div className="flex-1 min-w-0">
                     <h2 className=" flex font-bold text-lg ">
-                      To: Select a user
+                      À: Sélectionner un utilisateur
                     </h2>
                   </div>
                 </div>

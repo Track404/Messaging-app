@@ -65,7 +65,7 @@ function UserPageFr() {
 
     onSuccess: () => {
       console.log('Logout sent successfully');
-      navigate('/login');
+      navigate('/connexion');
 
       queryClient.invalidateQueries([
         'userInfo',

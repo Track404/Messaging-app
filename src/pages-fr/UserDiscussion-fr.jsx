@@ -209,7 +209,7 @@ function UserDiscussionFr() {
 
               <button
                 onClick={() => {
-                  navigate(`/newDiscussion`);
+                  navigate(`/nouvelleDiscussion`);
                 }}
                 className="group/button absolute bottom-32 right-10 cursor-pointer inline-flex items-center justify-center overflow-hidden rounded-md bg-amber-400 backdrop-blur-lg px-3 py-3 text-base font-semibold text-white transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl hover:shadow-gray-600/50 border border-white/20"
               >
