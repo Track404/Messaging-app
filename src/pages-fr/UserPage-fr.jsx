@@ -66,6 +66,7 @@ function UserPageFr() {
 
     onSuccess: () => {
       console.log('Logout sent successfully');
+      localStorage.removeItem('token');
       navigate('/connexion');
 
       queryClient.invalidateQueries([

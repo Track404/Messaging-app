@@ -39,7 +39,7 @@ function LoginPageFr() {
       setInvalidInput(null);
       setTimeout(() => {
         navigate('/interface');
-      }, 3000);
+      }, 2000);
     },
   });
 
