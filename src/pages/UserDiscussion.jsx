@@ -7,7 +7,7 @@ import {
   Undo2,
   Settings,
 } from 'lucide-react';
-import Discussion from '../components/discussion';
+import Discussion from '../components/Discussion';
 import ChatName from '../components/ChatName';
 import ProtectedPage from '../components/ProtectedRoute';
 import LoadingPageUser from './LoadingPage';

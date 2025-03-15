@@ -6,7 +6,7 @@ import {
   SendHorizontal,
   Settings,
 } from 'lucide-react';
-import Discussion from '../components/discussion';
+import Discussion from '../components/Discussion';
 import ChatName from '../components/ChatName';
 import LoadingPage from './LoadingPage';
 import ProtectedPage from '../components/ProtectedRoute';

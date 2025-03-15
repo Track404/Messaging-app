@@ -45,6 +45,7 @@ function NewGroup() {
       setValidationErrors(null);
       setInvalidInput(null);
       const chatId = data?.group?.id;
+
       if (chatId) {
         // Add users to the group
         addGroupUsersMutation({
@@ -61,7 +62,10 @@ function NewGroup() {
         }
         navigate(`/userDiscussion/group/${chatId}`);
       }
-      queryClient.invalidateQueries(['ChatDetails']);
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries(['ChatDetails']);
+      await queryClient.invalidateQueries(['chats']);
     },
     onError: (error) => {
       if (error?.data?.errors) {
@@ -181,6 +185,7 @@ function NewGroup() {
             <div className="h-full  overflow-auto">
               <div>
                 {allUsers?.data?.user.map((user) => {
+                  if (user.id === userToken) return;
                   return (
                     <UserCard
                       key={user.id}
@@ -208,7 +213,7 @@ function NewGroup() {
 
                     return (
                       <>
-                        <p key={user.id} className="pr-1">
+                        <p key={crypto.randomUUID()} className="pr-1">
                           {user.name},
                         </p>
                       </>
@@ -268,7 +273,7 @@ function NewGroup() {
                         }
                         return (
                           <>
-                            <p key={user.id} className="pr-1">
+                            <p key={crypto.randomUUID()} className="pr-1">
                               {user.name},
                             </p>
                           </>

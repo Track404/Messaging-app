@@ -44,11 +44,14 @@ function NewDisccusionFr() {
           chatId: chatId,
           userId: userToken,
         });
-        queryClient.invalidateQueries(['ChatDetails']);
 
         // Navigate to the chat
       }
-      navigate(`/userDiscussion/chat/${chatId}`);
+      navigate(`/discussionUtilisateur/chat/${chatId}`);
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries(['ChatDetails']);
+      await queryClient.invalidateQueries(['chats']);
     },
     onError: (error) => {
       console.error('Error creating chat:', error);

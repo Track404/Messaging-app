@@ -43,11 +43,14 @@ function NewDisccusion() {
           chatId: chatId,
           userId: userToken,
         });
-        queryClient.invalidateQueries(['ChatDetails']);
 
         // Navigate to the chat
       }
       navigate(`/userDiscussion/chat/${chatId}`);
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries(['ChatDetails']);
+      await queryClient.invalidateQueries(['chats']);
     },
     onError: (error) => {
       console.error('Error creating chat:', error);
@@ -110,6 +113,7 @@ function NewDisccusion() {
             <div className="h-full  overflow-auto">
               <div>
                 {allUsers?.data?.user.map((user) => {
+                  if (user.id === userToken) return;
                   return (
                     <UserCard
                       key={user.id}

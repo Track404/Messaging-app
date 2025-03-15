@@ -60,9 +60,12 @@ function NewGroupFr() {
             userId: userToken,
           });
         }
-        navigate(`/userDiscussion/group/${chatId}`);
+        navigate(`/discussionUtilisateur/group/${chatId}`);
       }
-      queryClient.invalidateQueries(['ChatDetails']);
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries(['ChatDetails']);
+      await queryClient.invalidateQueries(['chats']);
     },
     onError: (error) => {
       if (error?.data?.errors) {
