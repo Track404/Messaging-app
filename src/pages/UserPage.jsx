@@ -9,7 +9,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getUniqueUser, updateUser } from '../api/user';
 import { LogoutUser } from '../api/authentification';
 function UserPage() {
-  const { userToken } = useContext(AuthContext);
+  const { userToken, updateToken } = useContext(AuthContext);
   const queryClient = useQueryClient();
   const [isActive, setIsActive] = useState(false);
   const [alertIsActive, setAlertisActive] = useState(false);
@@ -65,13 +65,13 @@ function UserPage() {
 
     onSuccess: () => {
       console.log('Logout sent successfully');
-      navigate('/login');
-
+      updateToken(null);
       queryClient.invalidateQueries([
         'userInfo',
         'chats',
         'LastChatDetails,allUsers',
       ]);
+      navigate('/login');
     },
 
     onError: (error) => {
